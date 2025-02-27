@@ -1,12 +1,12 @@
-package telran.java55.teamleonidilgar;
+package telran.java55.teamleonid;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TeamLeonidIlgarApplication {
+class TeamLeonidApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(TeamLeonidIlgarApplication.class, args);
+        SpringApplication.run(TeamLeonidApplication.class, args);
     }
 }
