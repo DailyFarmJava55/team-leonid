@@ -6,13 +6,9 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.4.3</version>
-        <relativePath/> <!-- lookup parent from registerRepository -->
+        <relativePath/>
     </parent>
-    <groupId>telran.java55</groupId>
-    <artifactId>team-leonid</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>team-leonid</name>
-    <description>team-leonid</description>
+    <artifactId>Daily Farm</artifactId>
     <url/>
     <licenses>
         <license/>

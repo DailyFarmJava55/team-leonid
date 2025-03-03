@@ -1,6 +1,6 @@
-package telran.java55.teamleonid.business.dto;
+package dailyfarm.user.dto;
 
-public record RegisterDto(
+public record RegisterRequest(
     String email, // TODO: validate
     String password // TODO: validate
 ) {}

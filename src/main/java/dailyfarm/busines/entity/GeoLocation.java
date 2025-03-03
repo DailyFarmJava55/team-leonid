@@ -1,4 +1,4 @@
-package telran.java55.teamleonid.business.model;
+package dailyfarm.busines.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
