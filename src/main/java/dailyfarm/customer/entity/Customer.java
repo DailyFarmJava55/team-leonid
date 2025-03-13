@@ -1,12 +1,15 @@
 package dailyfarm.customer.entity;
 
-import dailyfarm.user.entity.User;
+import dailyfarm.account.entity.Account;
 import jakarta.persistence.Entity;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-@Entity
-@Getter @Setter
-public class Customer extends User {
+@Data @Entity
+@EqualsAndHashCode(callSuper = true)
+public class Customer extends Account {
 
+    public Customer() {
+        getRoles().add("ROLE_CUSTOMER");
+    }
 }

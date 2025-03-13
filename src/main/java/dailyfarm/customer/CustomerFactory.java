@@ -1,11 +1,11 @@
 package dailyfarm.customer;
 
+import dailyfarm.account.AccountFactory;
 import dailyfarm.customer.entity.Customer;
-import dailyfarm.user.UserFactory;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CustomerFactory implements UserFactory<Customer> {
+public class CustomerFactory implements AccountFactory<Customer> {
 
     @Override
     public Customer create() {
