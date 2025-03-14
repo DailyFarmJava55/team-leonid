@@ -15,19 +15,12 @@ public class Account {
     @EqualsAndHashCode.Include
     private Long id;
 
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     private String username;
-
-    @Column(unique = true)
-    private String email;
-
-    @Column(unique = true)
-    private String phone;
 
     @Column(nullable = false)
     private String password;
 
     @ElementCollection(fetch = FetchType.EAGER)
     private final Set<String> roles = new HashSet<>();
-
 }

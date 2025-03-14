@@ -15,9 +15,11 @@ public class ProfileService<T extends Account> {
     public ProfileResponse getProfile(Authentication authentication) {
         log.info(authentication.toString());
 
-        T account = accountRepository.findByUsernameOrEmailOrPhone(authentication.getName()).
+        T account = accountRepository.findByUsername(authentication.getName()).
             orElseThrow(() -> new EntityNotFoundException(authentication.getName()));
 
-        return new ProfileResponse(account.getUsername(), account.getEmail(), account.getPhone());
+        return new ProfileResponse(account.getUsername());
     }
+
+    // TODO: Account -> Profile
 }

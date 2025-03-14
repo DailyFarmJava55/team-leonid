@@ -11,11 +11,9 @@ public class MainApplication {
     }
 }
 
-// TODO: Beans Configuration
-// TODO: Inheritense, Mapping
-// TODO: Entity Validation
-// TODO: Resources, Properties
+// TODO: Hibernate Validation
+// TODO: Application Properties
 // TODO: Refresh Token Rotation
 // TODO: Revoke Refresh Tokens
 // TODO: Swagger Configuration
-// TODO: Exception Handling
+// TODO: Rest Controller Advice

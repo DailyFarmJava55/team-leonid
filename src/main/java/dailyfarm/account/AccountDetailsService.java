@@ -19,7 +19,7 @@ public class AccountDetailsService<T extends Account> implements UserDetailsServ
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return accountRepository.findByUsernameOrEmailOrPhone(username)
+        return accountRepository.findByUsername(username)
             .map(account ->
                 new User(username, account.getPassword(), getAuthorities(account)))
             .orElseThrow(() -> new UsernameNotFoundException(username));
