@@ -10,10 +10,3 @@ public class MainApplication {
         SpringApplication.run(MainApplication.class, args);
     }
 }
-
-// TODO: Hibernate Validation
-// TODO: Application Properties
-// TODO: Refresh Token Rotation
-// TODO: Revoke Refresh Tokens
-// TODO: Swagger Configuration
-// TODO: Rest Controller Advice

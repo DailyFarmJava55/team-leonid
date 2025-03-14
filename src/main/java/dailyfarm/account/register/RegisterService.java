@@ -16,7 +16,7 @@ public class RegisterService<T extends Account> {
     private final PasswordEncoder passwordEncoder;
 
     public void register(@RequestBody RegisterRequest request) {
-        log.info(request.toString());
+        log.info(String.valueOf(request));
 
         T account = accountFactory.create();
         account.setUsername(request.username());

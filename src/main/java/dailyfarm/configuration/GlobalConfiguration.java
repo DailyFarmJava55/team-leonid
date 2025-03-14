@@ -29,7 +29,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Slf4j @Configuration
 @RequiredArgsConstructor
@@ -54,10 +54,16 @@ public class GlobalConfiguration {
     }
 
     @Bean("BusinessSecurityFilterChain")
-    public SecurityFilterChain businessFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain businessFilterChain(
+        HttpSecurity httpSecurity,
+        JwtAuthenticationFilter jwtAuthenticationFilter,
+        @Qualifier("BusinessAuthenticationManager")
+        AuthenticationManager authenticationManager
+    ) throws Exception {
         log.info("BusinessSecurityFilterChain");
-        return http.securityMatcher("/business/**")
+        return httpSecurity.securityMatcher("/business/**")
             .csrf(AbstractHttpConfigurer::disable)
+            .authenticationManager(authenticationManager)
             .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
                 .requestMatchers("/business/login", "/business/register").permitAll()
                 .anyRequest().hasRole("BUSINESS")
@@ -65,15 +71,21 @@ public class GlobalConfiguration {
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
-            .addFilterBefore(jwtAuthenticationFilter(), BasicAuthenticationFilter.class)
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
             .build();
     }
 
     @Bean("CustomerSecurityFilterChain")
-    public SecurityFilterChain customerFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain customerFilterChain(
+        HttpSecurity httpSecurity,
+        JwtAuthenticationFilter jwtAuthenticationFilter,
+        @Qualifier("CustomerAuthenticationManager")
+        AuthenticationManager authenticationManager
+    ) throws Exception {
         log.info("CustomerSecurityFilterChain");
-        return http.securityMatcher("/customer/**")
+        return httpSecurity.securityMatcher("/customer/**")
             .csrf(AbstractHttpConfigurer::disable)
+            .authenticationManager(authenticationManager)
             .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
                 .requestMatchers("/customer/login", "/customer/register").permitAll()
                 .anyRequest().hasRole("CUSTOMER")
@@ -81,7 +93,7 @@ public class GlobalConfiguration {
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
-            .addFilterBefore(jwtAuthenticationFilter(), BasicAuthenticationFilter.class)
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
             .build();
     }
 
@@ -130,7 +142,7 @@ public class GlobalConfiguration {
     }
 
     @Bean("CustomerAuthenticationManager")
-    public AuthenticationManager customAuthenticationManager(
+    public AuthenticationManager customerAuthenticationManager(
         @Qualifier("CustomerAuthenticationProvider")
         AuthenticationProvider authenticationProvider
     ) {
