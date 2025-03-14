@@ -1,8 +1,9 @@
 package dailyfarm.business.entity;
 
 import jakarta.persistence.Embeddable;
+import lombok.Data;
 
-@Embeddable
+@Data @Embeddable
 public class Location {
 
     long latitude;

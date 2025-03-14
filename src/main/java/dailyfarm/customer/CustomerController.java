@@ -5,17 +5,18 @@ import dailyfarm.account.login.LoginService;
 import dailyfarm.account.profile.ProfileService;
 import dailyfarm.account.register.RegisterService;
 import dailyfarm.customer.entity.Customer;
+import dailyfarm.customer.profile.CustomerResponse;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("customer")
-public class CustomerController extends AccountController<Customer> {
+public class CustomerController extends AccountController<Customer, CustomerResponse> {
 
     public CustomerController(
         RegisterService<Customer> registerService,
         LoginService<Customer> loginService,
-        ProfileService<Customer> profileService
+        ProfileService<Customer, CustomerResponse> profileService
     ) {
         super(registerService, loginService, profileService);
     }

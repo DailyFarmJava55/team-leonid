@@ -16,9 +16,10 @@ public class JwtTokenProvider {
 
     private static final SecretKey secretKey = Jwts.SIG.HS256.key().build();
 
-    public static String authenticationToJwtToken(Authentication authentication, Long currentTimeMillis) {
-        List<String> authorities = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
-
+    public static String authenticationToJwtToken(Authentication authentication) {
+        List<String> authorities = authentication.getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority).toList();
+        long currentTimeMillis = System.currentTimeMillis();
         return Jwts.builder()
             .subject(authentication.getName())
             .issuedAt(new Date(currentTimeMillis))

@@ -8,18 +8,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 
 @Slf4j @RequiredArgsConstructor
-public class ProfileService<T extends Account> {
+public class ProfileService<T extends Account, R extends ProfileResponse> {
 
     private final AccountRepository<T> accountRepository;
+    private final Class<R> projectionClass;
 
-    public ProfileResponse getProfile(Authentication authentication) {
+    public R getProfile(Authentication authentication) {
         log.info(authentication.toString());
 
-        T account = accountRepository.findByUsername(authentication.getName()).
+        return accountRepository.findByUsername(authentication.getName(), projectionClass).
             orElseThrow(() -> new EntityNotFoundException(authentication.getName()));
-
-        return new ProfileResponse(account.getUsername());
     }
-
-    // TODO: Account -> Profile
 }

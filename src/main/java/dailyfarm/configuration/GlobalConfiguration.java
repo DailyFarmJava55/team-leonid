@@ -7,7 +7,9 @@ import dailyfarm.account.login.LoginService;
 import dailyfarm.account.profile.ProfileService;
 import dailyfarm.account.register.RegisterService;
 import dailyfarm.business.entity.Business;
+import dailyfarm.business.profile.BusinessResponse;
 import dailyfarm.customer.entity.Customer;
+import dailyfarm.customer.profile.CustomerResponse;
 import dailyfarm.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -190,16 +192,16 @@ public class GlobalConfiguration {
     }
 
     @Bean
-    public ProfileService<Business> businessProfileService(
+    public ProfileService<Business, BusinessResponse> businessProfileService(
         AccountRepository<Business> accountRepository
     ) {
-        return new ProfileService<>(accountRepository);
+        return new ProfileService<>(accountRepository, BusinessResponse.class);
     }
 
     @Bean
-    public ProfileService<Customer> customerProfileService(
+    public ProfileService<Customer, CustomerResponse> customerProfileService(
         AccountRepository<Customer> accountRepository
     ) {
-        return new ProfileService<>(accountRepository);
+        return new ProfileService<>(accountRepository, CustomerResponse.class);
     }
 }

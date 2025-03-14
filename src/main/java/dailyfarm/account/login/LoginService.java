@@ -17,13 +17,11 @@ public class LoginService<T extends Account> {
     public LoginResponse login(LoginRequest request) {
         log.info(request.toString());
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken(request.username(), request.password());
+        Authentication authentication = authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(request.username(), request.password())
+        );
 
-        authentication = authenticationManager.authenticate(authentication);
-
-        Long currentTimeMillis = System.currentTimeMillis();
-
-        String accessToken = authenticationToJwtToken(authentication, currentTimeMillis);
+        String accessToken = authenticationToJwtToken(authentication);
         String refreshToken = "success";
 
         return new LoginResponse(accessToken, refreshToken);
