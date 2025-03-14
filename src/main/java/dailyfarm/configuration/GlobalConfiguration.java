@@ -58,8 +58,6 @@ public class GlobalConfiguration {
         log.info("BusinessSecurityFilterChain");
         return http.securityMatcher("/business/**")
             .csrf(AbstractHttpConfigurer::disable)
-            // .headers(headers->headers.frameOptions(opt->opt.disable()))
-            // .httpBasic(Customizer.withDefaults())
             .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
                 .requestMatchers("/business/login", "/business/register").permitAll()
                 .anyRequest().hasRole("BUSINESS")
@@ -68,7 +66,6 @@ public class GlobalConfiguration {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             .addFilterBefore(jwtAuthenticationFilter(), BasicAuthenticationFilter.class)
-            // .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
             .build();
     }
 
@@ -77,8 +74,6 @@ public class GlobalConfiguration {
         log.info("CustomerSecurityFilterChain");
         return http.securityMatcher("/customer/**")
             .csrf(AbstractHttpConfigurer::disable)
-            // .headers(headers->headers.frameOptions(opt->opt.disable()))
-            // .httpBasic(Customizer.withDefaults())
             .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
                 .requestMatchers("/customer/login", "/customer/register").permitAll()
                 .anyRequest().hasRole("CUSTOMER")
@@ -87,7 +82,6 @@ public class GlobalConfiguration {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             .addFilterBefore(jwtAuthenticationFilter(), BasicAuthenticationFilter.class)
-            // .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
             .build();
     }
 
