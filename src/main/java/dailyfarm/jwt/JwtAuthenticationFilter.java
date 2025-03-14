@@ -1,4 +1,4 @@
-package dailyfarm.authentication;
+package dailyfarm.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -19,7 +19,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.replace("Bearer ", "");
 
-            Authentication authentication = JwtTokenProvider.authentication(token);
+            Authentication authentication = JwtTokenProvider.jwtTokenToAuthentication(token);
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }

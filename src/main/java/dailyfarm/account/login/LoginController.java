@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import static dailyfarm.authentication.JwtTokenProvider.generateAccessToken;
+import static dailyfarm.jwt.JwtTokenProvider.authenticationToJwtToken;
 
 @RequiredArgsConstructor
 public class LoginController {
@@ -25,13 +25,15 @@ public class LoginController {
 
         Long currentTimeMillis = System.currentTimeMillis();
 
-        String accessToken = generateAccessToken(authentication, currentTimeMillis);
+        String accessToken = authenticationToJwtToken(authentication, currentTimeMillis);
         String refreshToken = "success";
 
         return new LoginResponse(accessToken, refreshToken);
     }
 
-    // TODO: Postman (Authorization)
-    // TODO: Revoke Refresh Tokens
     // TODO: Refresh Token Rotation
+
+    // TODO: Revoke Refresh Tokens
+
+    // TODO: Postman (Authorization)
 }

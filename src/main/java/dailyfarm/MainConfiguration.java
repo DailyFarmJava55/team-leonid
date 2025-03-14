@@ -1,6 +1,6 @@
 package dailyfarm;
 
-import dailyfarm.authentication.JwtAuthenticationFilter;
+import dailyfarm.jwt.JwtAuthenticationFilter;
 import dailyfarm.business.BusinessDetailsService;
 import dailyfarm.customer.CustomerDetailsService;
 import lombok.RequiredArgsConstructor;

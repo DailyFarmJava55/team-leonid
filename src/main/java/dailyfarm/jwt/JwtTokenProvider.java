@@ -1,4 +1,4 @@
-package dailyfarm.authentication;
+package dailyfarm.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -16,7 +16,7 @@ public class JwtTokenProvider {
 
     private static final SecretKey key = Jwts.SIG.HS256.key().build();
 
-    public static String generateAccessToken(Authentication authentication, Long currentTimeMillis) {
+    public static String authenticationToJwtToken(Authentication authentication, Long currentTimeMillis) {
         List<String> authorities = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
 
         return Jwts.builder()
@@ -28,7 +28,7 @@ public class JwtTokenProvider {
             .compact();
     }
 
-    public static Authentication authentication(String token) {
+    public static Authentication jwtTokenToAuthentication(String token) {
         Claims claims = Jwts.parser()
             .verifyWith(key)
             .build()
@@ -37,16 +37,17 @@ public class JwtTokenProvider {
 
         @SuppressWarnings("unchecked")
         List<String> authorities = claims.get("authorities", List.class);
-        List<GrantedAuthority> authorities1 = authorities.stream()
+        List<GrantedAuthority> grantedAuthorities = authorities.stream()
             .map(SimpleGrantedAuthority::new)
             .collect(Collectors.toList());
 
         return new UsernamePasswordAuthenticationToken(
-            claims.getSubject(), null, authorities1
+            claims.getSubject(), null, grantedAuthorities
         );
     }
 
     // TODO: Resources
+
     // TODO: ExpiredJwtException
     // TODO: SignatureException
 }
