@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @RequiredArgsConstructor
-public class AccountController<T extends Account, R extends ProfileResponse> {
+public class AccountController<T extends Account> {
 
     private final RegisterService<T> registerService;
     private final LoginService<T> loginService;
-    private final ProfileService<T, R> profileService;
+    private final ProfileService<T> profileService;
 
     @PostMapping("register")
     @ResponseStatus(HttpStatus.CREATED)

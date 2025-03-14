@@ -8,12 +8,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 
 @Slf4j @RequiredArgsConstructor
-public class ProfileService<T extends Account, R extends ProfileResponse> {
+public class ProfileService<T extends Account> {
 
     private final AccountRepository<T> accountRepository;
-    private final Class<R> projectionClass;
+    private final Class<? extends ProfileResponse> projectionClass;
 
-    public R getProfile(Authentication authentication) {
+    public ProfileResponse getProfile(Authentication authentication) {
         log.info(authentication.toString());
 
         return accountRepository.findByUsername(authentication.getName(), projectionClass).

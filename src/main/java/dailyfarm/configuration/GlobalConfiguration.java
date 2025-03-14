@@ -186,14 +186,14 @@ public class GlobalConfiguration {
     }
 
     @Bean
-    public ProfileService<Business, BusinessResponse> businessProfileService(
+    public ProfileService<Business> businessProfileService(
         AccountRepository<Business> accountRepository
     ) {
         return new ProfileService<>(accountRepository, BusinessResponse.class);
     }
 
     @Bean
-    public ProfileService<Customer, CustomerResponse> customerProfileService(
+    public ProfileService<Customer> customerProfileService(
         AccountRepository<Customer> accountRepository
     ) {
         return new ProfileService<>(accountRepository, CustomerResponse.class);
