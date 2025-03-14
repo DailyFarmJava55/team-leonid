@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 public class JwtTokenProvider {
 
-    private static final SecretKey key = Jwts.SIG.HS256.key().build();
+    private static final SecretKey secretKey = Jwts.SIG.HS256.key().build();
 
     public static String authenticationToJwtToken(Authentication authentication, Long currentTimeMillis) {
         List<String> authorities = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
@@ -24,13 +24,13 @@ public class JwtTokenProvider {
             .issuedAt(new Date(currentTimeMillis))
             .expiration(new Date(currentTimeMillis + 1000 * 60 * 15)) // 15 minutes
             .claim("authorities", authorities)
-            .signWith(key)
+            .signWith(secretKey)
             .compact();
     }
 
     public static Authentication jwtTokenToAuthentication(String token) {
         Claims claims = Jwts.parser()
-            .verifyWith(key)
+            .verifyWith(secretKey)
             .build()
             .parseSignedClaims(token)
             .getPayload();

@@ -10,35 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // @ExceptionHandler(AccessDeniedException.class)
-    // @ResponseStatus(HttpStatus.FORBIDDEN)
-    // public void handleAccessDeniedException(
-    //     AccessDeniedException exception
-    // ) {
-    //     log.error(exception.getMessage());
-    // }
-
-    // @ExceptionHandler(AuthenticationException.class)
-    // @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    // public void handleAuthenticationException(
-    //     AuthenticationException exception
-    // ) {
-    //     log.error(exception.getMessage());
-    // }
-
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public void handleDataIntegrityViolationException(
-        DataIntegrityViolationException exception
-    ) {
-
-    }
-
-    // @ExceptionHandler(Exception.class)
-    // @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    // public void handleException(
-    //     Exception exception
-    // ) {
-    //     log.error(exception.getMessage());
-    // }
+    public void handle(DataIntegrityViolationException exception) {}
 }

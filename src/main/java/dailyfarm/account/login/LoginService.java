@@ -15,6 +15,8 @@ public class LoginService<T extends Account> {
     private final AuthenticationManager authenticationManager;
 
     public LoginResponse login(LoginRequest request) {
+        log.info(request.toString());
+
         Authentication authentication = new UsernamePasswordAuthenticationToken(request.username(), request.password());
 
         authentication = authenticationManager.authenticate(authentication);

@@ -1,13 +1,12 @@
 package dailyfarm.configuration;
 
+import dailyfarm.account.AccountDetailsService;
 import dailyfarm.account.AccountFactory;
 import dailyfarm.account.AccountRepository;
 import dailyfarm.account.login.LoginService;
 import dailyfarm.account.profile.ProfileService;
 import dailyfarm.account.register.RegisterService;
-import dailyfarm.business.BusinessDetailsService;
 import dailyfarm.business.entity.Business;
-import dailyfarm.customer.CustomerDetailsService;
 import dailyfarm.customer.entity.Customer;
 import dailyfarm.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +33,23 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @RequiredArgsConstructor
 @EnableWebSecurity(debug = true)
 public class GlobalConfiguration {
+
+    @Bean @Primary
+    public AuthenticationManager defaultAuthenticationManager(
+        AuthenticationConfiguration authenticationConfiguration
+    ) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter();
+    }
 
     @Bean("BusinessSecurityFilterChain")
     public SecurityFilterChain businessFilterChain(HttpSecurity http) throws Exception {
@@ -74,28 +90,37 @@ public class GlobalConfiguration {
     }
 
     @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter();
+    public AccountDetailsService<Business> businessDetailsService(
+        AccountRepository<Business> accountRepository
+    ) {
+        return new AccountDetailsService<>(accountRepository);
+    }
+
+    @Bean
+    public AccountDetailsService<Customer> customerDetailsService(
+        AccountRepository<Customer> accountRepository
+    ) {
+        return new AccountDetailsService<>(accountRepository);
     }
 
     @Bean("BusinessAuthenticationProvider")
     public AuthenticationProvider businessAuthenticationProvider(
-        BusinessDetailsService businessDetailsService,
+        AccountDetailsService<Business> accountDetailsService,
         PasswordEncoder passwordEncoder
     ) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(businessDetailsService);
+        provider.setUserDetailsService(accountDetailsService);
         provider.setPasswordEncoder(passwordEncoder);
         return provider;
     }
 
     @Bean("CustomerAuthenticationProvider")
     public AuthenticationProvider customerAuthenticationProvider(
-        CustomerDetailsService customerDetailsService,
+        AccountDetailsService<Customer> accountDetailsService,
         PasswordEncoder passwordEncoder
     ) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(customerDetailsService);
+        provider.setUserDetailsService(accountDetailsService);
         provider.setPasswordEncoder(passwordEncoder);
         return provider;
     }
@@ -116,22 +141,31 @@ public class GlobalConfiguration {
         return new ProviderManager(authenticationProvider);
     }
 
-    @Bean @Primary
-    public AuthenticationManager defaultAuthenticationManager(
-        AuthenticationConfiguration authenticationConfiguration
-    ) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
+    @Bean
+    public AccountFactory<Business> businessFactory() {
+        return Business::new;
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    public AccountFactory<Customer> customerFactory() {
+        return Customer::new;
     }
 
     @Bean
     public RegisterService<Business> businessRegisterService(
         AccountRepository<Business> accountRepository,
         AccountFactory<Business> accountFactory,
+        PasswordEncoder passwordEncoder
+    ) {
+        return new RegisterService<>(
+            accountRepository, accountFactory, passwordEncoder
+        );
+    }
+
+    @Bean
+    public RegisterService<Customer> customerRegisterService(
+        AccountRepository<Customer> accountRepository,
+        AccountFactory<Customer> accountFactory,
         PasswordEncoder passwordEncoder
     ) {
         return new RegisterService<>(
@@ -148,29 +182,18 @@ public class GlobalConfiguration {
     }
 
     @Bean
-    public ProfileService<Business> businessProfileService(
-        AccountRepository<Business> accountRepository
-    ) {
-        return new ProfileService<>(accountRepository);
-    }
-
-    @Bean
-    public RegisterService<Customer> customerRegisterService(
-        AccountRepository<Customer> accountRepository,
-        AccountFactory<Customer> accountFactory,
-        PasswordEncoder passwordEncoder
-    ) {
-        return new RegisterService<>(
-            accountRepository, accountFactory, passwordEncoder
-        );
-    }
-
-    @Bean
     public LoginService<Customer> customerLoginService(
         @Qualifier("CustomerAuthenticationManager")
         AuthenticationManager authenticationManager
     ) {
         return new LoginService<>(authenticationManager);
+    }
+
+    @Bean
+    public ProfileService<Business> businessProfileService(
+        AccountRepository<Business> accountRepository
+    ) {
+        return new ProfileService<>(accountRepository);
     }
 
     @Bean

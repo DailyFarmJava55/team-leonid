@@ -12,11 +12,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class RegisterService<T extends Account> {
 
     private final AccountRepository<T> accountRepository;
-    private final AccountFactory<T> accountFactory;
+    private final AccountFactory<T> accountSupplier;
     private final PasswordEncoder passwordEncoder;
 
     public void register(@RequestBody RegisterRequest request) {
-        T account = accountFactory.create();
+        log.info(request.toString());
+
+        T account = accountSupplier.create();
         account.setUsername(request.username());
         account.setEmail(request.email());
         account.setPhone(request.phone());

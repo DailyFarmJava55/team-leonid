@@ -11,18 +11,11 @@ public class MainApplication {
     }
 }
 
+// TODO: Beans Configuration
+// TODO: Inheritense, Mapping
+// TODO: Entity Validation
 // TODO: Resources, Properties
 // TODO: Refresh Token Rotation
 // TODO: Revoke Refresh Tokens
-// TODO: Postman Authorization
-// TODO: Inherited Account Classes
-// TODO: RestControllerAdvice
-// TODO: EntityNotFoundException
-// TODO: IllegalArgumentException
-// TODO: IllegalStateException
-// TODO: IllegalArgumentException
-// TODO: UsernameNotFoundException
-// TODO: ExpiredJwtException
-// TODO: SignatureException
-// TODO: Entity Validation
 // TODO: Swagger Configuration
+// TODO: Exception Handling

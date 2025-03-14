@@ -41,4 +41,3 @@ public class AccountController<T extends Account> {
         return profileService.getProfile(authentication);
     }
 }
-
