@@ -45,9 +45,4 @@ public class JwtTokenProvider {
             claims.getSubject(), null, grantedAuthorities
         );
     }
-
-    // TODO: Resources
-
-    // TODO: ExpiredJwtException
-    // TODO: SignatureException
 }

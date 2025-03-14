@@ -30,6 +30,4 @@ public class AccountDetailsService<T extends Account> implements UserDetailsServ
     private Collection<GrantedAuthority> getAuthorities(T account) {
         return account.getRoles().stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
     }
-
-    // TODO: UsernameNotFoundException
 }

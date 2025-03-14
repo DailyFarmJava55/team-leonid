@@ -6,14 +6,12 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
 
 @Slf4j @RequiredArgsConstructor
-public class ProfileController<T extends Account> {
+public class ProfileService<T extends Account> {
 
     private final AccountRepository<T> accountRepository;
 
-    @GetMapping("profile")
     public ProfileResponse getProfile(Authentication authentication) {
         log.info(authentication.toString());
 
@@ -22,7 +20,4 @@ public class ProfileController<T extends Account> {
 
         return new ProfileResponse(account.getUsername(), account.getEmail(), account.getPhone());
     }
-
-    // TODO: Inherited Classes
-    // TODO: EntityNotFoundException
 }

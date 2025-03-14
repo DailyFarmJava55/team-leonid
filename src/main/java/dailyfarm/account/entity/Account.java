@@ -30,5 +30,4 @@ public class Account {
     @ElementCollection(fetch = FetchType.EAGER)
     private final Set<String> roles = new HashSet<>();
 
-    // TODO: Validation
 }

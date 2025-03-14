@@ -4,21 +4,17 @@ import dailyfarm.account.AccountFactory;
 import dailyfarm.account.AccountRepository;
 import dailyfarm.account.entity.Account;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
-@RequiredArgsConstructor
-public class RegisterController<T extends Account> {
+@Slf4j @RequiredArgsConstructor
+public class RegisterService<T extends Account> {
 
     private final AccountRepository<T> accountRepository;
     private final AccountFactory<T> accountFactory;
     private final PasswordEncoder passwordEncoder;
 
-    @PostMapping("register")
-    @ResponseStatus(HttpStatus.CREATED)
     public void register(@RequestBody RegisterRequest request) {
         T account = accountFactory.create();
         account.setUsername(request.username());

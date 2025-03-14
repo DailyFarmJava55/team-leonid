@@ -16,6 +16,4 @@ public record RegisterRequest(
             throw new IllegalArgumentException("Password cannot be null");
         }
     }
-
-    // TODO: IllegalArgumentException
 }

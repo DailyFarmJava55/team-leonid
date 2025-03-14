@@ -32,7 +32,4 @@ public record LoginRequest(
 
         throw new IllegalStateException("Username cannot be null");
     }
-
-    // TODO: IllegalArgumentException
-    // TODO: IllegalStateException
 }

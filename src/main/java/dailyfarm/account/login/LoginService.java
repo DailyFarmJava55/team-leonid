@@ -1,24 +1,20 @@
 package dailyfarm.account.login;
 
+import dailyfarm.account.entity.Account;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 import static dailyfarm.jwt.JwtTokenProvider.authenticationToJwtToken;
 
-@RequiredArgsConstructor
-public class LoginController {
+@Slf4j @RequiredArgsConstructor
+public class LoginService<T extends Account> {
 
     private final AuthenticationManager authenticationManager;
 
-    @PostMapping("login")
-    @ResponseStatus(HttpStatus.OK)
-    public LoginResponse login(@RequestBody LoginRequest request) {
+    public LoginResponse login(LoginRequest request) {
         Authentication authentication = new UsernamePasswordAuthenticationToken(request.username(), request.password());
 
         authentication = authenticationManager.authenticate(authentication);
@@ -30,10 +26,4 @@ public class LoginController {
 
         return new LoginResponse(accessToken, refreshToken);
     }
-
-    // TODO: Refresh Token Rotation
-
-    // TODO: Revoke Refresh Tokens
-
-    // TODO: Postman (Authorization)
 }

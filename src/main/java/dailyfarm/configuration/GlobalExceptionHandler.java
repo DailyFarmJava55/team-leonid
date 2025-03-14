@@ -1,4 +1,4 @@
-package dailyfarm;
+package dailyfarm.configuration;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Slf4j @RestControllerAdvice
-public class MainExceptionHandler {
+public class GlobalExceptionHandler {
 
     // @ExceptionHandler(AccessDeniedException.class)
     // @ResponseStatus(HttpStatus.FORBIDDEN)
@@ -41,6 +41,4 @@ public class MainExceptionHandler {
     // ) {
     //     log.error(exception.getMessage());
     // }
-
-    // TODO: Error Handling
 }
