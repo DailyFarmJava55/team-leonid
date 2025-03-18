@@ -1,43 +1,48 @@
 package dailyfarm.account;
 
+import dailyfarm.account.dto.*;
 import dailyfarm.account.entity.Account;
-import dailyfarm.account.login.LoginRequest;
-import dailyfarm.account.login.LoginResponse;
-import dailyfarm.account.login.LoginService;
-import dailyfarm.account.profile.ProfileResponse;
-import dailyfarm.account.profile.ProfileService;
-import dailyfarm.account.register.RegisterRequest;
-import dailyfarm.account.register.RegisterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import java.security.Principal;
+
 @RequiredArgsConstructor
 public class AccountController<T extends Account> {
 
-    private final RegisterService<T> registerService;
-    private final LoginService<T> loginService;
-    private final ProfileService<T> profileService;
+    private final AccountService<T> accountService;
 
     @PostMapping("register")
     @ResponseStatus(HttpStatus.CREATED)
     public void register(@RequestBody RegisterRequest request) {
-        registerService.register(request);
+        accountService.register(request);
     }
 
     @PostMapping("login")
     @ResponseStatus(HttpStatus.OK)
-    public LoginResponse login(@RequestBody LoginRequest request) {
-        return loginService.login(request);
+    public TokenResponse login(@RequestBody LoginRequest request) {
+        return accountService.login(request);
     }
 
     @GetMapping("profile")
     @ResponseStatus(HttpStatus.OK)
-    public ProfileResponse getProfile(Authentication authentication) {
-        return profileService.getProfile(authentication);
+    public AccountResponse getProfile(Principal principal) {
+        return accountService.getProfile(principal);
+    }
+
+    @PostMapping("change-username")
+    @ResponseStatus(HttpStatus.OK)
+    public void changeUsername(Principal principal, ChangeUsernameRequest request) {
+        accountService.changeUsername(principal, request);
+    }
+
+    @PostMapping("change-password")
+    @ResponseStatus(HttpStatus.OK)
+    public void changePassword(Principal principal, ChangePasswordRequest request) {
+        accountService.changePassword(principal, request);
     }
 }

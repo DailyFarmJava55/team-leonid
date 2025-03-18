@@ -12,14 +12,18 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class JwtTokenProvider {
+public class JwtAuthenticationProvider {
 
     private static final SecretKey secretKey = Jwts.SIG.HS256.key().build();
+
+    private JwtAuthenticationProvider() {}
 
     public static String authenticationToJwtToken(Authentication authentication) {
         List<String> authorities = authentication.getAuthorities().stream()
             .map(GrantedAuthority::getAuthority).toList();
+
         long currentTimeMillis = System.currentTimeMillis();
+
         return Jwts.builder()
             .subject(authentication.getName())
             .issuedAt(new Date(currentTimeMillis))

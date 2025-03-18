@@ -1,11 +1,11 @@
-package dailyfarm.account.register;
+package dailyfarm.account.dto;
 
-public record RegisterRequest(
+public record LoginRequest(
     String username,
     String password
 ) {
 
-    public RegisterRequest {
+    public LoginRequest {
         if (username == null) {
             throw new IllegalArgumentException("Username cannot be null");
         }

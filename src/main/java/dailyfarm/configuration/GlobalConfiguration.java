@@ -3,13 +3,11 @@ package dailyfarm.configuration;
 import dailyfarm.account.AccountDetailsService;
 import dailyfarm.account.AccountFactory;
 import dailyfarm.account.AccountRepository;
-import dailyfarm.account.login.LoginService;
-import dailyfarm.account.profile.ProfileService;
-import dailyfarm.account.register.RegisterService;
+import dailyfarm.account.AccountService;
+import dailyfarm.business.dto.BusinessResponse;
 import dailyfarm.business.entity.Business;
-import dailyfarm.business.profile.BusinessResponse;
+import dailyfarm.customer.dto.CustomerResponse;
 import dailyfarm.customer.entity.Customer;
-import dailyfarm.customer.profile.CustomerResponse;
 import dailyfarm.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -160,54 +158,36 @@ public class GlobalConfiguration {
     }
 
     @Bean
-    public RegisterService<Business> businessRegisterService(
+    public AccountService<Business> businessAccountService(
+        @Qualifier("BusinessAuthenticationManager")
+        AuthenticationManager authenticationManager,
         AccountRepository<Business> accountRepository,
         AccountFactory<Business> accountFactory,
         PasswordEncoder passwordEncoder
     ) {
-        return new RegisterService<>(
-            accountRepository, accountFactory, passwordEncoder
+        return new AccountService<>(
+            authenticationManager,
+            accountRepository,
+            accountFactory,
+            passwordEncoder,
+            BusinessResponse.class
         );
     }
 
     @Bean
-    public RegisterService<Customer> customerRegisterService(
+    public AccountService<Customer> customerAccountService(
+        @Qualifier("CustomerAuthenticationManager")
+        AuthenticationManager authenticationManager,
         AccountRepository<Customer> accountRepository,
         AccountFactory<Customer> accountFactory,
         PasswordEncoder passwordEncoder
     ) {
-        return new RegisterService<>(
-            accountRepository, accountFactory, passwordEncoder
+        return new AccountService<>(
+            authenticationManager,
+            accountRepository,
+            accountFactory,
+            passwordEncoder,
+            CustomerResponse.class
         );
-    }
-
-    @Bean
-    public LoginService<Business> businessLoginService(
-        @Qualifier("BusinessAuthenticationManager")
-        AuthenticationManager authenticationManager
-    ) {
-        return new LoginService<>(authenticationManager);
-    }
-
-    @Bean
-    public LoginService<Customer> customerLoginService(
-        @Qualifier("CustomerAuthenticationManager")
-        AuthenticationManager authenticationManager
-    ) {
-        return new LoginService<>(authenticationManager);
-    }
-
-    @Bean
-    public ProfileService<Business> businessProfileService(
-        AccountRepository<Business> accountRepository
-    ) {
-        return new ProfileService<>(accountRepository, BusinessResponse.class);
-    }
-
-    @Bean
-    public ProfileService<Customer> customerProfileService(
-        AccountRepository<Customer> accountRepository
-    ) {
-        return new ProfileService<>(accountRepository, CustomerResponse.class);
     }
 }
