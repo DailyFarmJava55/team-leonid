@@ -12,11 +12,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class JwtUtils {
+public class JwtAuthenticationProvider {
 
     private static final SecretKey secretKey = Jwts.SIG.HS256.key().build();
 
-    private JwtUtils() {}
+    private JwtAuthenticationProvider() {}
 
     public static String generateToken(Authentication authentication) {
         List<String> authorities = authentication.getAuthorities().stream()
@@ -33,7 +33,7 @@ public class JwtUtils {
             .compact();
     }
 
-    public static Authentication authentication(String token) {
+    public static Authentication authenticate(String token) {
         Claims claims = Jwts.parser()
             .verifyWith(secretKey)
             .build()
@@ -46,8 +46,6 @@ public class JwtUtils {
             .map(SimpleGrantedAuthority::new)
             .collect(Collectors.toList());
 
-        return new UsernamePasswordAuthenticationToken(
-            claims.getSubject(), null, grantedAuthorities
-        );
+        return new UsernamePasswordAuthenticationToken(claims.getSubject(), null, grantedAuthorities);
     }
 }

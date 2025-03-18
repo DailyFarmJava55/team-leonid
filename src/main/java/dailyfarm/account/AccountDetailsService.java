@@ -20,11 +20,11 @@ public class AccountDetailsService<T extends Account> implements UserDetailsServ
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return accountRepository.findByUsername(username)
-            .map(account -> new User(username, account.getPassword(), getAuthorities(account)))
+            .map(account -> new User(account.getUsername(), account.getPassword(), getAuthorities(account)))
             .orElseThrow(() -> new UsernameNotFoundException(username));
     }
 
-    private Collection<GrantedAuthority> getAuthorities(T account) {
+    private Collection<GrantedAuthority> getAuthorities(Account account) {
         return account.getRoles().stream()
             .map(SimpleGrantedAuthority::new)
             .collect(Collectors.toList());

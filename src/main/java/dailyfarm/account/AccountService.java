@@ -2,7 +2,7 @@ package dailyfarm.account;
 
 import dailyfarm.account.dto.*;
 import dailyfarm.account.entity.Account;
-import dailyfarm.jwt.JwtUtils;
+import dailyfarm.jwt.JwtAuthenticationProvider;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,8 +10,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.security.Principal;
 
 @Slf4j @RequiredArgsConstructor
 public class AccountService<T extends Account> {
@@ -36,35 +34,32 @@ public class AccountService<T extends Account> {
             new UsernamePasswordAuthenticationToken(request.username(), request.password())
         );
 
-        String accessToken = JwtUtils.generateToken(authentication);
+        String accessToken = JwtAuthenticationProvider.generateToken(authentication);
         String refreshToken = "success";
 
         return new TokenResponse(accessToken, refreshToken);
     }
 
-    public AccountResponse getProfile(Principal principal) {
-        return accountRepository
-            .findByUsername(principal.getName(), projectionClass)
-            .orElseThrow(() -> new EntityNotFoundException(principal.getName()));
+    public AccountResponse me(Authentication authentication) {
+        return accountRepository.findByUsername(authentication.getName(), projectionClass)
+            .orElseThrow(() -> new EntityNotFoundException(authentication.getName()));
     }
 
-    public void changeUsername(Principal principal, ChangeUsernameRequest request) {
-        T account = accountRepository
-            .findByUsername(principal.getName())
-            .orElseThrow(() -> new EntityNotFoundException(principal.getName()));
+    public void changeUsername(ChangeUsernameRequest request, Authentication authentication) {
+        T account = accountRepository.findByUsername(authentication.getName())
+            .orElseThrow(() -> new EntityNotFoundException(authentication.getName()));
 
         account.setUsername(request.username());
     }
 
-    public void changePassword(Principal principal, ChangePasswordRequest request) {
-        T account = accountRepository
-            .findByUsername(principal.getName())
-            .orElseThrow(() -> new EntityNotFoundException(principal.getName()));
+    public void changePassword(ChangePasswordRequest request, Authentication authentication) {
+        T account = accountRepository.findByUsername(authentication.getName())
+            .orElseThrow(() -> new EntityNotFoundException(authentication.getName()));
 
         account.setPassword(request.password());
     }
 
-    // TODO: Username vs UUID
+    // TODO: Generic Classes
 
     // TODO: Opaque Refresh Token
 
@@ -79,12 +74,13 @@ public class AccountService<T extends Account> {
 
     // TODO: Change Email
 
-    // TODO: Domain
+    // TODO: Domain Logic
 
     // TODO: Swagger
     // TODO: Postman
 
     // TODO: @Transactional
+    // TODO: @Entity @Version
 
     // TODO: Authentication
     // TODO: Configuration
@@ -95,6 +91,8 @@ public class AccountService<T extends Account> {
     // TODO: Exception Handling
     // TODO: Clean Architecture
 
+    // TODO: Username vs UUID
+
     // TODO: Roles
     // TODO: Authorities
 
@@ -104,6 +102,4 @@ public class AccountService<T extends Account> {
 
     // TODO: RSAPublicKey
     // TODO: RSAPrivateKey
-
-    // TODO: @Entity @Version
 }

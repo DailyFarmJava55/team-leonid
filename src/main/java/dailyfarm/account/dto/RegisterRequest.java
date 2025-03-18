@@ -1,9 +1,6 @@
 package dailyfarm.account.dto;
 
-public record RegisterRequest(
-    String username,
-    String password
-) {
+public record RegisterRequest(String username, String password) {
 
     public RegisterRequest {
         if (username == null) {

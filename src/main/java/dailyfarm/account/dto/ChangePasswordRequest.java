@@ -1,8 +1,6 @@
 package dailyfarm.account.dto;
 
-public record ChangePasswordRequest(
-    String password
-) {
+public record ChangePasswordRequest(String password) {
 
     public ChangePasswordRequest {
         if (password == null) {
