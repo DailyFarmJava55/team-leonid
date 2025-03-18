@@ -2,7 +2,7 @@ package dailyfarm.account;
 
 import dailyfarm.account.dto.*;
 import dailyfarm.account.entity.Account;
-import dailyfarm.jwt.JwtAuthenticationProvider;
+import dailyfarm.jwt.JwtUtils;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +36,7 @@ public class AccountService<T extends Account> {
             new UsernamePasswordAuthenticationToken(request.username(), request.password())
         );
 
-        String accessToken = JwtAuthenticationProvider.authenticationToJwtToken(authentication);
+        String accessToken = JwtUtils.generateToken(authentication);
         String refreshToken = "success";
 
         return new TokenResponse(accessToken, refreshToken);
@@ -64,6 +64,8 @@ public class AccountService<T extends Account> {
         account.setPassword(request.password());
     }
 
+    // TODO: Username vs UUID
+
     // TODO: Opaque Refresh Token
 
     // TODO: Refresh Token Rotation
@@ -71,20 +73,37 @@ public class AccountService<T extends Account> {
 
     // TODO: Logout
 
-    // TODO: Profile (Update)
+    // TODO: Update Profile
 
     // TODO: Reset Password
+
+    // TODO: Change Email
 
     // TODO: Domain
 
     // TODO: Swagger
     // TODO: Postman
 
-    // TODO: Configuration
+    // TODO: @Transactional
+
     // TODO: Authentication
+    // TODO: Configuration
     // TODO: Properties
+    // TODO: Security
     // TODO: Logging
     // TODO: Validation
     // TODO: Exception Handling
     // TODO: Clean Architecture
+
+    // TODO: Roles
+    // TODO: Authorities
+
+    // TODO: UserDetails
+    // TODO: GenericFilterBean
+    // TODO: AbstractAuthenticationToken
+
+    // TODO: RSAPublicKey
+    // TODO: RSAPrivateKey
+
+    // TODO: @Entity @Version
 }

@@ -12,13 +12,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class JwtAuthenticationProvider {
+public class JwtUtils {
 
     private static final SecretKey secretKey = Jwts.SIG.HS256.key().build();
 
-    private JwtAuthenticationProvider() {}
+    private JwtUtils() {}
 
-    public static String authenticationToJwtToken(Authentication authentication) {
+    public static String generateToken(Authentication authentication) {
         List<String> authorities = authentication.getAuthorities().stream()
             .map(GrantedAuthority::getAuthority).toList();
 
@@ -33,7 +33,7 @@ public class JwtAuthenticationProvider {
             .compact();
     }
 
-    public static Authentication jwtTokenToAuthentication(String token) {
+    public static Authentication authentication(String token) {
         Claims claims = Jwts.parser()
             .verifyWith(secretKey)
             .build()

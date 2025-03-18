@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
@@ -30,6 +31,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Slf4j @Configuration
+@EnableJpaAuditing
 @RequiredArgsConstructor
 @EnableWebSecurity(debug = true)
 public class GlobalConfiguration {
@@ -42,13 +44,13 @@ public class GlobalConfiguration {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter();
     }
 
     @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter();
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
     @Bean("BusinessSecurityFilterChain")
@@ -95,6 +97,22 @@ public class GlobalConfiguration {
             .build();
     }
 
+    @Bean("BusinessAuthenticationManager")
+    public AuthenticationManager businessAuthenticationManager(
+        @Qualifier("BusinessAuthenticationProvider")
+        AuthenticationProvider authenticationProvider
+    ) {
+        return new ProviderManager(authenticationProvider);
+    }
+
+    @Bean("CustomerAuthenticationManager")
+    public AuthenticationManager customerAuthenticationManager(
+        @Qualifier("CustomerAuthenticationProvider")
+        AuthenticationProvider authenticationProvider
+    ) {
+        return new ProviderManager(authenticationProvider);
+    }
+
     @Bean
     public AccountDetailsService<Business> businessDetailsService(
         AccountRepository<Business> accountRepository
@@ -129,22 +147,6 @@ public class GlobalConfiguration {
         provider.setUserDetailsService(accountDetailsService);
         provider.setPasswordEncoder(passwordEncoder);
         return provider;
-    }
-
-    @Bean("BusinessAuthenticationManager")
-    public AuthenticationManager businessAuthenticationManager(
-        @Qualifier("BusinessAuthenticationProvider")
-        AuthenticationProvider authenticationProvider
-    ) {
-        return new ProviderManager(authenticationProvider);
-    }
-
-    @Bean("CustomerAuthenticationManager")
-    public AuthenticationManager customerAuthenticationManager(
-        @Qualifier("CustomerAuthenticationProvider")
-        AuthenticationProvider authenticationProvider
-    ) {
-        return new ProviderManager(authenticationProvider);
     }
 
     @Bean
