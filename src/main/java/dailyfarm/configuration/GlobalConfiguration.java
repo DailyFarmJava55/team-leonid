@@ -1,9 +1,6 @@
 package dailyfarm.configuration;
 
-import dailyfarm.account.AccountDetailsService;
-import dailyfarm.account.AccountFactory;
-import dailyfarm.account.AccountRepository;
-import dailyfarm.account.AccountService;
+import dailyfarm.account.*;
 import dailyfarm.business.dto.BusinessResponse;
 import dailyfarm.business.entity.Business;
 import dailyfarm.customer.dto.CustomerResponse;
@@ -65,7 +62,8 @@ public class GlobalConfiguration {
             .csrf(AbstractHttpConfigurer::disable)
             .authenticationManager(authenticationManager)
             .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-                .requestMatchers("/business/login", "/business/register").permitAll()
+                .requestMatchers("/business/register", "/business/login").permitAll()
+                .requestMatchers("/business/refresh-token", "/business/logout").permitAll()
                 .anyRequest().hasRole("BUSINESS")
             )
             .sessionManagement(session -> session
@@ -87,7 +85,8 @@ public class GlobalConfiguration {
             .csrf(AbstractHttpConfigurer::disable)
             .authenticationManager(authenticationManager)
             .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-                .requestMatchers("/customer/login", "/customer/register").permitAll()
+                .requestMatchers("/customer/register", "/customer/login").permitAll()
+                .requestMatchers("/customer/refresh-token", "/customer/logout").permitAll()
                 .anyRequest().hasRole("CUSTOMER")
             )
             .sessionManagement(session -> session
@@ -113,20 +112,6 @@ public class GlobalConfiguration {
         return new ProviderManager(authenticationProvider);
     }
 
-    @Bean
-    public AccountDetailsService<Business> businessDetailsService(
-        AccountRepository<Business> accountRepository
-    ) {
-        return new AccountDetailsService<>(accountRepository);
-    }
-
-    @Bean
-    public AccountDetailsService<Customer> customerDetailsService(
-        AccountRepository<Customer> accountRepository
-    ) {
-        return new AccountDetailsService<>(accountRepository);
-    }
-
     @Bean("BusinessAuthenticationProvider")
     public AuthenticationProvider businessAuthenticationProvider(
         AccountDetailsService<Business> accountDetailsService,
@@ -150,6 +135,20 @@ public class GlobalConfiguration {
     }
 
     @Bean
+    public AccountDetailsService<Business> businessDetailsService(
+        AccountRepository<Business> accountRepository
+    ) {
+        return new AccountDetailsService<>(accountRepository);
+    }
+
+    @Bean
+    public AccountDetailsService<Customer> customerDetailsService(
+        AccountRepository<Customer> accountRepository
+    ) {
+        return new AccountDetailsService<>(accountRepository);
+    }
+
+    @Bean
     public AccountFactory<Business> businessFactory() {
         return Business::new;
     }
@@ -165,14 +164,16 @@ public class GlobalConfiguration {
         AuthenticationManager authenticationManager,
         AccountRepository<Business> accountRepository,
         AccountFactory<Business> accountFactory,
-        PasswordEncoder passwordEncoder
+        PasswordEncoder passwordEncoder,
+        RefreshTokenRepository refreshTokenRepository
     ) {
         return new AccountService<>(
             authenticationManager,
             accountRepository,
             accountFactory,
             passwordEncoder,
-            BusinessResponse.class
+            BusinessResponse.class,
+            refreshTokenRepository
         );
     }
 
@@ -182,14 +183,16 @@ public class GlobalConfiguration {
         AuthenticationManager authenticationManager,
         AccountRepository<Customer> accountRepository,
         AccountFactory<Customer> accountFactory,
-        PasswordEncoder passwordEncoder
+        PasswordEncoder passwordEncoder,
+        RefreshTokenRepository refreshTokenRepository
     ) {
         return new AccountService<>(
             authenticationManager,
             accountRepository,
             accountFactory,
             passwordEncoder,
-            CustomerResponse.class
+            CustomerResponse.class,
+            refreshTokenRepository
         );
     }
 }

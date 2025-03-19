@@ -8,24 +8,29 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.crypto.SecretKey;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class JwtAuthenticationProvider {
+public class JwtService {
 
     private static final SecretKey secretKey = Jwts.SIG.HS256.key().build();
 
-    private JwtAuthenticationProvider() {}
+    private JwtService() {}
 
     public static String generateToken(Authentication authentication) {
         List<String> authorities = authentication.getAuthorities().stream()
             .map(GrantedAuthority::getAuthority).toList();
 
+        return generateToken(authentication.getName(), authorities);
+    }
+
+    public static String generateToken(String username, Collection<String> authorities) {
         long currentTimeMillis = System.currentTimeMillis();
 
         return Jwts.builder()
-            .subject(authentication.getName())
+            .subject(username)
             .issuedAt(new Date(currentTimeMillis))
             .expiration(new Date(currentTimeMillis + 1000 * 60 * 15)) // 15 minutes
             .claim("authorities", authorities)

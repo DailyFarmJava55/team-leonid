@@ -27,10 +27,22 @@ public class AccountController<T extends Account> {
         return accountService.login(request);
     }
 
+    @PostMapping("refresh-token")
+    @ResponseStatus(HttpStatus.OK)
+    public TokenResponse refreshToken(@RequestBody RefreshTokenRequest request) {
+        return accountService.refreshToken(request);
+    }
+
+    @PostMapping("logout")
+    @ResponseStatus(HttpStatus.OK)
+    public void logout(@RequestBody RefreshTokenRequest request) {
+        accountService.logout(request);
+    }
+
     @GetMapping("profile")
     @ResponseStatus(HttpStatus.OK)
     public AccountResponse getProfile(Authentication authentication) {
-        return accountService.me(authentication);
+        return accountService.getProfile(authentication);
     }
 
     @PostMapping("change-username")
