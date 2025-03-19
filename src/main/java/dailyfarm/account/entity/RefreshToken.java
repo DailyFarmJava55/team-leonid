@@ -14,7 +14,7 @@ import java.time.Instant;
 public class RefreshToken {
 
     @Id @EqualsAndHashCode.Include
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

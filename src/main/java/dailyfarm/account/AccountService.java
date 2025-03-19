@@ -113,9 +113,11 @@ public class AccountService<T extends Account> {
         account.setPassword(request.password());
     }
 
-    // TODO: Domain Logic
+    // TODO: Surprise-Bag
 
-    // TODO: Refresh Token HttpOnly Cookies
+    // TODO: Orders
+
+    // TODO: Refresh Token HttpOnly
 
     // TODO: Update Profile
 

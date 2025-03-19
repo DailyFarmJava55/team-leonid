@@ -18,7 +18,7 @@ import java.util.Set;
 public class Account {
 
     @Id @EqualsAndHashCode.Include
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
 
     @Column(nullable = false, unique = true)
