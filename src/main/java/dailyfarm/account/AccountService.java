@@ -71,7 +71,17 @@ public class AccountService<T extends Account> {
 
         Account account = refreshToken.getAccount();
 
+        refreshTokenRepository.delete(refreshToken);
+
         String accessToken = JwtService.generateToken(account.getUsername(), account.getRoles());
+
+        refreshToken = new RefreshToken();
+
+        refreshToken.setAccount(account);
+        refreshToken.setToken(UUID.randomUUID().toString());
+        refreshToken.setExpiryDate(Instant.now().plus(30, ChronoUnit.DAYS));
+
+        refreshTokenRepository.save(refreshToken);
 
         return new TokenResponse(accessToken, refreshToken.getToken());
     }
@@ -103,18 +113,17 @@ public class AccountService<T extends Account> {
         account.setPassword(request.password());
     }
 
-    // TODO: Refresh Token Rotation
-    // TODO: Revoke Refresh Tokens
+    // TODO: Domain Logic
 
-    // TODO: Refresh Token HttpOnly
+    // TODO: Refresh Token HttpOnly Cookies
 
     // TODO: Update Profile
 
     // TODO: Reset Password
 
-    // TODO: Change Email
+    // TODO: Email
 
-    // TODO: Domain Logic
+    // TODO: Change Email
 
     // TODO: Swagger
     // TODO: Postman
@@ -144,7 +153,16 @@ public class AccountService<T extends Account> {
     // TODO: GenericFilterBean
     // TODO: AbstractAuthenticationToken
 
+    // https://docs.spring.io/spring-security/reference/api/java/org/springframework/security/oauth2/core/package-summary.html
+    // https://docs.spring.io/spring-security/reference/api/java/org/springframework/security/oauth2/client/package-summary.html
+    // https://docs.spring.io/spring-security/reference/api/java/org/springframework/security/oauth2/server/resource/package-summary.html
+    // https://docs.spring.io/spring-security/reference/api/java/org/springframework/security/oauth2/jwt/package-summary.html
+
+    // TODO: InMemory JWT Invalidation
     // TODO: Refresh Token Invalidation
+
+    // TODO: Remove Expired Tokens from the Database
+    // TODO: Remove Unused Tokens from the Database
 
     // TODO: RSAPublicKey
     // TODO: RSAPrivateKey
