@@ -3,7 +3,7 @@ package dailyfarm.account;
 import dailyfarm.account.dto.*;
 import dailyfarm.account.entity.Account;
 import dailyfarm.account.entity.RefreshToken;
-import dailyfarm.jwt.JwtService;
+import dailyfarm.jwt.JwtTools;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -48,7 +48,9 @@ public class AccountService<T extends Account> {
             new UsernamePasswordAuthenticationToken(request.username(), request.password())
         );
 
-        String accessToken = JwtService.generateToken(authentication);
+        System.out.println(authentication.getPrincipal().getClass());
+
+        String accessToken = JwtTools.generateToken(authentication);
 
         Account account = accountRepository.findByUsername(authentication.getName())
             .orElseThrow(EntityNotFoundException::new);
@@ -73,7 +75,7 @@ public class AccountService<T extends Account> {
 
         refreshTokenRepository.delete(refreshToken);
 
-        String accessToken = JwtService.generateToken(account.getUsername(), account.getRoles());
+        String accessToken = JwtTools.generateToken(account.getUsername(), account.getAuthorities());
 
         refreshToken = new RefreshToken();
 
@@ -117,21 +119,21 @@ public class AccountService<T extends Account> {
 
     // TODO: Orders
 
-    // TODO: Refresh Token HttpOnly
+    // TODO: Change Location
 
-    // TODO: Update Profile
-
-    // TODO: Reset Password
+    // TODO: Email Verification & OTP
 
     // TODO: Email
 
     // TODO: Change Email
 
-    // TODO: Swagger
-    // TODO: Postman
+    // TODO: Reset Password
 
-    // TODO: @Transactional
-    // TODO: @Entity @Version
+    // TODO: Refresh Token HttpOnly
+
+    // TODO: Update Profile
+
+    // TODO: Username vs UUID
 
     // TODO: Authentication
     // TODO: Configuration
@@ -140,13 +142,16 @@ public class AccountService<T extends Account> {
     // TODO: Security
     // TODO: Logging
     // TODO: Validation
-    // TODO: AuditorAware
     // TODO: Exception Handling
     // TODO: Clean Architecture
 
-    // TODO: Email Verification & OTP
+    // TODO: AuditorAware
 
-    // TODO: Username vs UUID
+    // TODO: @Transactional
+    // TODO: @Entity @Version
+
+    // TODO: Swagger
+    // TODO: Postman
 
     // TODO: Roles
     // TODO: Authorities
@@ -168,4 +173,70 @@ public class AccountService<T extends Account> {
 
     // TODO: RSAPublicKey
     // TODO: RSAPrivateKey
+
+    // Method Arguments
+    // java.security.Principal
+    //
+    // Currently authenticated user—possibly a specific Principal implementation
+    // class if known.
+    //
+    // Note that this argument is not resolved eagerly, if it is annotated in order to allow
+    // a custom resolver to resolve it before falling back on default resolution via
+    // HttpServletRequest#getUserPrincipal. For example, the Spring Security
+    // Authentication implements Principal and would be injected as such via
+    // HttpServletRequest#getUserPrincipal, unless it is also annotated with
+    // @AuthenticationPrincipal in which case it is resolved by a custom Spring
+    // Security resolver through Authentication#getPrincipal.
+
+    // public interface Principal
+    //    boolean equals(Object another);
+    //    String toString();
+    //    int hashCode();
+    //    String getName();
+
+    // public interface Authentication extends Principal
+    //    Collection<? extends GrantedAuthority> getAuthorities();
+    //    Object getCredentials();
+    //    Object getDetails();
+    //    Object getPrincipal();
+    //    boolean isAuthenticated();
+    //    void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException;
+
+    // public interface CredentialsContainer
+    //    void eraseCredentials();
+
+    // public abstract class AbstractAuthenticationToken implements Authentication, CredentialsContainer
+    //    public String getName()
+    //        if (this.getPrincipal() instanceof UserDetails userDetails)
+    //            return userDetails.getUsername();
+    //        if (this.getPrincipal() instanceof AuthenticatedPrincipal authenticatedPrincipal)
+    //            return authenticatedPrincipal.getName();
+    //        if (this.getPrincipal() instanceof Principal principal)
+    //            return principal.getName();
+    //        return (this.getPrincipal() == null) ? "" : this.getPrincipal().toString();
+    //    public void eraseCredentials() {
+    //        eraseSecret(getCredentials());
+    //        eraseSecret(getPrincipal());
+    //        eraseSecret(this.details);
+    //    private void eraseSecret(Object secret)
+    //        if (secret instanceof CredentialsContainer container)
+    //            container.eraseCredentials();
+
+    // public class UsernamePasswordAuthenticationToken extends AbstractAuthenticationToken
+    //    public UsernamePasswordAuthenticationToken(Object principal, Object credentials)
+    //        super(null);
+    //        this.principal = principal;
+    //        this.credentials = credentials;
+    //        setAuthenticated(false);
+    //    public UsernamePasswordAuthenticationToken(Object principal, Object credentials, Collection<? extends GrantedAuthority> authorities) {
+    //        super(authorities);
+    //        this.principal = principal;
+    //        this.credentials = credentials;
+    //        super.setAuthenticated(true); // must use super, as we override
+    //    public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
+    //        Assert.isTrue(!isAuthenticated, "Cannot set this token to trusted - use constructor which takes a GrantedAuthority list instead");
+    //        super.setAuthenticated(false);
+    //    public void eraseCredentials()
+    //        super.eraseCredentials();
+    //        this.credentials = null;
 }

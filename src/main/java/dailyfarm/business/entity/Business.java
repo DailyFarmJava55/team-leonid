@@ -14,6 +14,6 @@ public class Business extends Account {
     Location location;
 
     public Business() {
-        getRoles().add("ROLE_BUSINESS");
+        getAuthorities().add("ROLE_BUSINESS");
     }
 }

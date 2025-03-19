@@ -10,6 +10,6 @@ import lombok.EqualsAndHashCode;
 public class Customer extends Account {
 
     public Customer() {
-        getRoles().add("ROLE_CUSTOMER");
+        getAuthorities().add("ROLE_CUSTOMER");
     }
 }

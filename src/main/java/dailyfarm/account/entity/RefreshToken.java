@@ -13,8 +13,8 @@ import java.time.Instant;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class RefreshToken {
 
-    @Id @EqualsAndHashCode.Include
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue
+    @EqualsAndHashCode.Include
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

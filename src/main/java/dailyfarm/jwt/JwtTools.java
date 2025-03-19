@@ -13,11 +13,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class JwtService {
+public class JwtTools {
 
     private static final SecretKey secretKey = Jwts.SIG.HS256.key().build();
 
-    private JwtService() {}
+    private JwtTools() {}
 
     public static String generateToken(Authentication authentication) {
         List<String> authorities = authentication.getAuthorities().stream()

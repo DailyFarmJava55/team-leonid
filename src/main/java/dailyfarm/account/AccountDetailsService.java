@@ -25,7 +25,7 @@ public class AccountDetailsService<T extends Account> implements UserDetailsServ
     }
 
     private Collection<GrantedAuthority> getAuthorities(Account account) {
-        return account.getRoles().stream()
+        return account.getAuthorities().stream()
             .map(SimpleGrantedAuthority::new)
             .collect(Collectors.toList());
     }

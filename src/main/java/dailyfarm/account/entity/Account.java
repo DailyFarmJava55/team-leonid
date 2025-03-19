@@ -17,8 +17,8 @@ import java.util.Set;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Account {
 
-    @Id @EqualsAndHashCode.Include
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @Id @GeneratedValue
+    @EqualsAndHashCode.Include
     private Long id;
 
     @Column(nullable = false, unique = true)
@@ -36,5 +36,5 @@ public class Account {
     private Instant lastModifiedDate;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    private final Set<String> roles = new HashSet<>();
+    private final Set<String> authorities = new HashSet<>();
 }
