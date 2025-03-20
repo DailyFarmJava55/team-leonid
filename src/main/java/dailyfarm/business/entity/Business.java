@@ -18,8 +18,8 @@ public class Business extends Account {
     @Embedded
     Location location;
 
-    @OneToMany(mappedBy = "business", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<SurpriseBag> surpriseBag;
+    @OneToMany(mappedBy = "business", cascade = CascadeType.ALL)
+    List<SurpriseBag> surpriseBags;
 
     public Business() {
         getAuthorities().add("ROLE_BUSINESS");

@@ -1,6 +1,7 @@
 package dailyfarm.orders.entity;
 
 import dailyfarm.customer.entity.Customer;
+import dailyfarm.surprisebag.entity.SurpriseBag;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,4 +18,12 @@ public class Orders {
 
     @ManyToOne(optional = false)
     private Customer customer;
+
+    @ManyToOne(optional = false)
+    private SurpriseBag surpriseBag;
+
+    // TODO: Order Status?
+    // TODO: Order Item?
+    // TODO: Quantity?
+    // TODO: Price At Order Time?
 }

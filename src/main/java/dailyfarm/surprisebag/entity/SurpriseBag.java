@@ -17,4 +17,13 @@ public class SurpriseBag {
 
     @ManyToOne(optional = false)
     private Business business;
+
+    // TODO: TAGS Or/And TYPE(S)?
+    // TODO: Price?
+    // TODO: Product Stock?
+    // TODO: Product Id?
+    // TODO: Maps Id?
+    // TODO: Product?
+    // TODO: Available Stock?
+    // TODO: Reserved Stock?
 }

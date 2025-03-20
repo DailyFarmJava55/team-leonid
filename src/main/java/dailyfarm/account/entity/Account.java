@@ -18,8 +18,8 @@ import java.util.Set;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public abstract class Account {
 
-    @Id @GeneratedValue
-    @EqualsAndHashCode.Include
+    @Id @EqualsAndHashCode.Include
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(nullable = false, unique = true)
