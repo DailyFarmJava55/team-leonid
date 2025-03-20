@@ -9,13 +9,14 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @EntityListeners(AuditingEntityListener.class)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Account {
+public abstract class Account {
 
     @Id @GeneratedValue
     @EqualsAndHashCode.Include
@@ -37,4 +38,7 @@ public class Account {
 
     @ElementCollection(fetch = FetchType.EAGER)
     private final Set<String> authorities = new HashSet<>();
+
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RefreshToken> refreshTokens;
 }

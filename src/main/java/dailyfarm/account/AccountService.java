@@ -156,9 +156,9 @@ public class AccountService<T extends Account> {
     // TODO: Roles
     // TODO: Authorities
 
-    // TODO: UserDetails
-    // TODO: GenericFilterBean
-    // TODO: AbstractAuthenticationToken
+    // TODO: (User: UserDetails) !== Principal
+    // TODO: Authentication(principal: Object)
+    // TODO: Authentication(Object): Principal
 
     // https://docs.spring.io/spring-security/reference/api/java/org/springframework/security/oauth2/core/package-summary.html
     // https://docs.spring.io/spring-security/reference/api/java/org/springframework/security/oauth2/client/package-summary.html
@@ -173,6 +173,39 @@ public class AccountService<T extends Account> {
 
     // TODO: RSAPublicKey
     // TODO: RSAPrivateKey
+
+    // TODO: @CreatedBy, @LastModifiedBy
+
+    // TODO: Unidirectional Data Flow
+
+    // TODO: Single Responsibility Principle
+
+    // class SpringSecurityAuditorAware implements AuditorAware<User> {
+    //
+    //   @Override
+    //   public Optional<User> getCurrentAuditor() {
+    //
+    //     return Optional.ofNullable(SecurityContextHolder.getContext())
+    //             .map(SecurityContext::getAuthentication)
+    //             .filter(Authentication::isAuthenticated)
+    //             .map(Authentication::getPrincipal)
+    //             .map(User.class::cast);
+    //   }
+    // }
+
+    // class SpringSecurityAuditorAware implements AuditorAware<User> {
+    //
+    //   public User getCurrentAuditor() {
+    //
+    //     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    //
+    //     if (authentication == null || !authentication.isAuthenticated()) {
+    //       return null;
+    //     }
+    //
+    //     return ((MyUserDetails) authentication.getPrincipal()).getUser();
+    //   }
+    // }
 
     // Method Arguments
     // java.security.Principal

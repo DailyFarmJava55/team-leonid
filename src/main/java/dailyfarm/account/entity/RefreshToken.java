@@ -17,7 +17,7 @@ public class RefreshToken {
     @EqualsAndHashCode.Include
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(optional = false)
     private Account account;
 
     @Column(nullable = false, unique = true, updatable = false)
