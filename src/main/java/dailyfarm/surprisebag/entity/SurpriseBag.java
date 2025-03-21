@@ -1,7 +1,6 @@
-package dailyfarm.order.entity;
+package dailyfarm.surprisebag.entity;
 
-import dailyfarm.customer.entity.CustomerEntity;
-import dailyfarm.surprisebag.entity.SurpriseBagEntity;
+import dailyfarm.business.entity.Business;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -12,20 +11,21 @@ import java.util.UUID;
 @Data @Entity
 @EntityListeners(AuditingEntityListener.class)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class OrderEntity {
+public class SurpriseBag {
 
     @Id @GeneratedValue
     @EqualsAndHashCode.Include
     private UUID uuid;
 
     @ManyToOne(optional = false)
-    private CustomerEntity customer;
+    private Business business;
 
-    @ManyToOne(optional = false)
-    private SurpriseBagEntity surpriseBag;
-
-    // TODO: Order Status?
-    // TODO: Order Item?
-    // TODO: Quantity?
-    // TODO: Price At Order Time?
+    // TODO: TAGS Or/And TYPE(S)?
+    // TODO: Price?
+    // TODO: Product Stock?
+    // TODO: Product Id?
+    // TODO: Maps Id?
+    // TODO: Product?
+    // TODO: Available Stock?
+    // TODO: Reserved Stock?
 }

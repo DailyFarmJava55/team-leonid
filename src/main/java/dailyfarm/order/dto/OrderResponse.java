@@ -1,5 +1,7 @@
 package dailyfarm.order.dto;
 
-public record OrderResponse(java.util.UUID uuid, java.util.UUID customerUuid, java.util.UUID surpriseBagUuid) {
+import java.util.UUID;
+
+public record OrderResponse(UUID uuid, UUID customerUuid, UUID surpriseBagUuid) {
 
 }

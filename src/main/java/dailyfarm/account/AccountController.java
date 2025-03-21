@@ -1,7 +1,7 @@
 package dailyfarm.account;
 
 import dailyfarm.account.dto.*;
-import dailyfarm.account.entity.AccountEntity;
+import dailyfarm.account.entity.Account;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @RequiredArgsConstructor
-public class AccountController<T extends AccountEntity> {
+public class AccountController<T extends Account> {
 
     private final AccountService<T> accountService;
 

@@ -2,9 +2,9 @@ package dailyfarm.configuration;
 
 import dailyfarm.account.*;
 import dailyfarm.business.dto.BusinessResponse;
-import dailyfarm.business.entity.BusinessEntity;
+import dailyfarm.business.entity.Business;
 import dailyfarm.customer.dto.CustomerResponse;
-import dailyfarm.customer.entity.CustomerEntity;
+import dailyfarm.customer.entity.Customer;
 import dailyfarm.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -116,7 +116,7 @@ public class GlobalConfiguration {
 
     @Bean("BusinessAuthenticationProvider")
     public AuthenticationProvider businessAuthenticationProvider(
-        AccountDetailsService<BusinessEntity> accountDetailsService,
+        AccountDetailsService<Business> accountDetailsService,
         PasswordEncoder passwordEncoder
     ) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -127,7 +127,7 @@ public class GlobalConfiguration {
 
     @Bean("CustomerAuthenticationProvider")
     public AuthenticationProvider customerAuthenticationProvider(
-        AccountDetailsService<CustomerEntity> accountDetailsService,
+        AccountDetailsService<Customer> accountDetailsService,
         PasswordEncoder passwordEncoder
     ) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -137,35 +137,35 @@ public class GlobalConfiguration {
     }
 
     @Bean
-    public AccountDetailsService<BusinessEntity> businessDetailsService(
-        AccountRepository<BusinessEntity> accountRepository
+    public AccountDetailsService<Business> businessDetailsService(
+        AccountRepository<Business> accountRepository
     ) {
         return new AccountDetailsService<>(accountRepository);
     }
 
     @Bean
-    public AccountDetailsService<CustomerEntity> customerDetailsService(
-        AccountRepository<CustomerEntity> accountRepository
+    public AccountDetailsService<Customer> customerDetailsService(
+        AccountRepository<Customer> accountRepository
     ) {
         return new AccountDetailsService<>(accountRepository);
     }
 
     @Bean
-    public AccountFactory<BusinessEntity> businessFactory() {
-        return BusinessEntity::new;
+    public AccountFactory<Business> businessFactory() {
+        return Business::new;
     }
 
     @Bean
-    public AccountFactory<CustomerEntity> customerFactory() {
-        return CustomerEntity::new;
+    public AccountFactory<Customer> customerFactory() {
+        return Customer::new;
     }
 
     @Bean
-    public AccountService<BusinessEntity> businessAccountService(
+    public AccountService<Business> businessAccountService(
         @Qualifier("BusinessAuthenticationManager")
         AuthenticationManager authenticationManager,
-        AccountRepository<BusinessEntity> accountRepository,
-        AccountFactory<BusinessEntity> accountFactory,
+        AccountRepository<Business> accountRepository,
+        AccountFactory<Business> accountFactory,
         PasswordEncoder passwordEncoder,
         RefreshTokenRepository refreshTokenRepository
     ) {
@@ -180,11 +180,11 @@ public class GlobalConfiguration {
     }
 
     @Bean
-    public AccountService<CustomerEntity> customerAccountService(
+    public AccountService<Customer> customerAccountService(
         @Qualifier("CustomerAuthenticationManager")
         AuthenticationManager authenticationManager,
-        AccountRepository<CustomerEntity> accountRepository,
-        AccountFactory<CustomerEntity> accountFactory,
+        AccountRepository<Customer> accountRepository,
+        AccountFactory<Customer> accountFactory,
         PasswordEncoder passwordEncoder,
         RefreshTokenRepository refreshTokenRepository
     ) {

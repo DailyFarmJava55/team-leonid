@@ -1,8 +1,8 @@
 package dailyfarm.account;
 
-import dailyfarm.account.entity.AccountEntity;
+import dailyfarm.account.entity.Account;
 
-public interface AccountFactory<T extends AccountEntity> {
+public interface AccountFactory<T extends Account> {
 
     T create();
 }

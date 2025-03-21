@@ -1,12 +1,12 @@
 package dailyfarm.order;
 
 import dailyfarm.customer.CustomerRepository;
-import dailyfarm.customer.entity.CustomerEntity;
+import dailyfarm.customer.entity.Customer;
 import dailyfarm.order.dto.CreateOrderRequest;
 import dailyfarm.order.dto.OrderResponse;
-import dailyfarm.order.entity.OrderEntity;
+import dailyfarm.order.entity.Order;
 import dailyfarm.surprisebag.SurpriseBagRepository;
-import dailyfarm.surprisebag.entity.SurpriseBagEntity;
+import dailyfarm.surprisebag.entity.SurpriseBag;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,13 +22,13 @@ public class OrderService {
     private final SurpriseBagRepository surpriseBagRepository;
 
     public OrderResponse create(Authentication authentication, CreateOrderRequest request) {
-        CustomerEntity customer = customerRepository.findByUsername(authentication.getName())
+        Customer customer = customerRepository.findByUsername(authentication.getName())
             .orElseThrow(() -> new EntityNotFoundException(authentication.getName()));
 
-        SurpriseBagEntity surpriseBag = surpriseBagRepository.findById(request.surpriseBagId())
+        SurpriseBag surpriseBag = surpriseBagRepository.findById(request.surpriseBagId())
             .orElseThrow(() -> new EntityNotFoundException(request.surpriseBagId().toString()));
 
-        OrderEntity order = new OrderEntity();
+        Order order = new Order();
         order.setCustomer(customer);
         order.setSurpriseBag(surpriseBag);
 

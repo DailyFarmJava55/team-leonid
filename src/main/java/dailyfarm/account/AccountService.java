@@ -1,8 +1,8 @@
 package dailyfarm.account;
 
 import dailyfarm.account.dto.*;
-import dailyfarm.account.entity.AccountEntity;
-import dailyfarm.account.entity.RefreshTokenEntity;
+import dailyfarm.account.entity.Account;
+import dailyfarm.account.entity.RefreshToken;
 import dailyfarm.jwt.JwtTools;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
@@ -19,7 +19,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 @Slf4j @RequiredArgsConstructor
-public class AccountService<T extends AccountEntity> {
+public class AccountService<T extends Account> {
 
     private final AuthenticationManager authenticationManager;
     private final AccountRepository<T> accountRepository;
@@ -51,10 +51,10 @@ public class AccountService<T extends AccountEntity> {
 
         String accessToken = JwtTools.generateToken(authentication);
 
-        AccountEntity account = accountRepository.findByUsername(authentication.getName())
+        Account account = accountRepository.findByUsername(authentication.getName())
             .orElseThrow(() -> new EntityNotFoundException(authentication.getName()));
 
-        RefreshTokenEntity refreshToken = new RefreshTokenEntity();
+        RefreshToken refreshToken = new RefreshToken();
         refreshToken.setAccount(account);
         refreshToken.setToken(UUID.randomUUID().toString());
         refreshToken.setExpiryDate(Instant.now().plus(30, ChronoUnit.DAYS));
@@ -66,16 +66,16 @@ public class AccountService<T extends AccountEntity> {
 
     @Transactional
     public TokenResponse refreshToken(RefreshTokenRequest request) {
-        RefreshTokenEntity refreshToken = refreshTokenRepository.findByTokenAndExpiryDateAfter(request.refreshToken(), Instant.now())
+        RefreshToken refreshToken = refreshTokenRepository.findByTokenAndExpiryDateAfter(request.refreshToken(), Instant.now())
             .orElseThrow(() -> new RuntimeException("Refresh token is expired or not found"));
 
-        AccountEntity account = refreshToken.getAccount();
+        Account account = refreshToken.getAccount();
 
         refreshTokenRepository.delete(refreshToken);
 
         String accessToken = JwtTools.generateToken(account.getUsername(), account.getAuthorities());
 
-        refreshToken = new RefreshTokenEntity();
+        refreshToken = new RefreshToken();
         refreshToken.setAccount(account);
         refreshToken.setToken(UUID.randomUUID().toString());
         refreshToken.setExpiryDate(Instant.now().plus(30, ChronoUnit.DAYS));

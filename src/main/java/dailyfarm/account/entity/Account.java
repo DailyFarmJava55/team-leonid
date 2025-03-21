@@ -17,7 +17,7 @@ import java.util.UUID;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @EntityListeners(AuditingEntityListener.class)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public abstract class AccountEntity {
+public abstract class Account {
 
     @Id @GeneratedValue
     @EqualsAndHashCode.Include
@@ -41,5 +41,5 @@ public abstract class AccountEntity {
     private final Set<String> authorities = new HashSet<>();
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RefreshTokenEntity> refreshTokens;
+    private List<RefreshToken> refreshTokens;
 }

@@ -1,7 +1,7 @@
 package dailyfarm.customer.entity;
 
-import dailyfarm.account.entity.AccountEntity;
-import dailyfarm.order.entity.OrderEntity;
+import dailyfarm.account.entity.Account;
+import dailyfarm.order.entity.Order;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -12,12 +12,12 @@ import java.util.List;
 
 @Data @Entity
 @EqualsAndHashCode(callSuper = true)
-public class CustomerEntity extends AccountEntity {
+public class Customer extends Account {
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-    List<OrderEntity> orders;
+    List<Order> orders;
 
-    public CustomerEntity() {
+    public Customer() {
         getAuthorities().add("ROLE_CUSTOMER");
     }
 }

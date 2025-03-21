@@ -1,7 +1,7 @@
 package dailyfarm.business.entity;
 
-import dailyfarm.account.entity.AccountEntity;
-import dailyfarm.surprisebag.entity.SurpriseBagEntity;
+import dailyfarm.account.entity.Account;
+import dailyfarm.surprisebag.entity.SurpriseBag;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -13,15 +13,15 @@ import java.util.List;
 
 @Data @Entity
 @EqualsAndHashCode(callSuper = true)
-public class BusinessEntity extends AccountEntity {
+public class Business extends Account {
 
     @Embedded
     LocationValue location;
 
     @OneToMany(mappedBy = "business", cascade = CascadeType.ALL)
-    List<SurpriseBagEntity> surpriseBags;
+    List<SurpriseBag> surpriseBags;
 
-    public BusinessEntity() {
+    public Business() {
         getAuthorities().add("ROLE_BUSINESS");
     }
 }

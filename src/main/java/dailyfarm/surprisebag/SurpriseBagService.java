@@ -1,10 +1,10 @@
 package dailyfarm.surprisebag;
 
 import dailyfarm.business.BusinessRepository;
-import dailyfarm.business.entity.BusinessEntity;
+import dailyfarm.business.entity.Business;
 import dailyfarm.surprisebag.dto.CreateSurpriseBagRequest;
 import dailyfarm.surprisebag.dto.SurpriseBagResponse;
-import dailyfarm.surprisebag.entity.SurpriseBagEntity;
+import dailyfarm.surprisebag.entity.SurpriseBag;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,10 +21,10 @@ public class SurpriseBagService {
 
     @Transactional
     public SurpriseBagResponse create(Authentication authentication, CreateSurpriseBagRequest request) {
-        BusinessEntity business = businessRepository.findByUsername(authentication.getName())
+        Business business = businessRepository.findByUsername(authentication.getName())
             .orElseThrow(() -> new EntityNotFoundException(authentication.getName()));
 
-        SurpriseBagEntity surpriseBag = new SurpriseBagEntity();
+        SurpriseBag surpriseBag = new SurpriseBag();
         surpriseBag.setBusiness(business);
 
         surpriseBagRepository.save(surpriseBag);

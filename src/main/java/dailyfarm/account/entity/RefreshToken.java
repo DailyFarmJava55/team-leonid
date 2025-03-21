@@ -12,14 +12,14 @@ import java.util.UUID;
 @Data @Entity
 @EntityListeners(AuditingEntityListener.class)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class RefreshTokenEntity {
+public class RefreshToken {
 
     @Id @GeneratedValue
     @EqualsAndHashCode.Include
     private UUID uuid;
 
     @ManyToOne(optional = false)
-    private AccountEntity account;
+    private Account account;
 
     @Column(nullable = false, unique = true, updatable = false)
     private String token;
