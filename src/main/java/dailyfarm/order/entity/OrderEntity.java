@@ -1,26 +1,28 @@
-package dailyfarm.orders.entity;
+package dailyfarm.order.entity;
 
-import dailyfarm.customer.entity.Customer;
-import dailyfarm.surprisebag.entity.SurpriseBag;
+import dailyfarm.customer.entity.CustomerEntity;
+import dailyfarm.surprisebag.entity.SurpriseBagEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.util.UUID;
+
 @Data @Entity
 @EntityListeners(AuditingEntityListener.class)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Orders {
+public class OrderEntity {
 
     @Id @GeneratedValue
     @EqualsAndHashCode.Include
-    private Long id;
+    private UUID uuid;
 
     @ManyToOne(optional = false)
-    private Customer customer;
+    private CustomerEntity customer;
 
     @ManyToOne(optional = false)
-    private SurpriseBag surpriseBag;
+    private SurpriseBagEntity surpriseBag;
 
     // TODO: Order Status?
     // TODO: Order Item?

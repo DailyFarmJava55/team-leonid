@@ -1,8 +1,8 @@
 package dailyfarm.account;
 
 import dailyfarm.account.dto.*;
-import dailyfarm.account.entity.Account;
-import dailyfarm.account.entity.RefreshToken;
+import dailyfarm.account.entity.AccountEntity;
+import dailyfarm.account.entity.RefreshTokenEntity;
 import dailyfarm.jwt.JwtTools;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
@@ -19,7 +19,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 @Slf4j @RequiredArgsConstructor
-public class AccountService<T extends Account> {
+public class AccountService<T extends AccountEntity> {
 
     private final AuthenticationManager authenticationManager;
     private final AccountRepository<T> accountRepository;
@@ -35,7 +35,6 @@ public class AccountService<T extends Account> {
         }
 
         T account = accountFactory.create();
-
         account.setUsername(request.username());
         account.setPassword(passwordEncoder.encode(request.password()));
 
@@ -52,11 +51,10 @@ public class AccountService<T extends Account> {
 
         String accessToken = JwtTools.generateToken(authentication);
 
-        Account account = accountRepository.findByUsername(authentication.getName())
-            .orElseThrow(EntityNotFoundException::new);
+        AccountEntity account = accountRepository.findByUsername(authentication.getName())
+            .orElseThrow(() -> new EntityNotFoundException(authentication.getName()));
 
-        RefreshToken refreshToken = new RefreshToken();
-
+        RefreshTokenEntity refreshToken = new RefreshTokenEntity();
         refreshToken.setAccount(account);
         refreshToken.setToken(UUID.randomUUID().toString());
         refreshToken.setExpiryDate(Instant.now().plus(30, ChronoUnit.DAYS));
@@ -68,17 +66,16 @@ public class AccountService<T extends Account> {
 
     @Transactional
     public TokenResponse refreshToken(RefreshTokenRequest request) {
-        RefreshToken refreshToken = refreshTokenRepository.findByTokenAndExpiryDateAfter(request.refreshToken(), Instant.now())
+        RefreshTokenEntity refreshToken = refreshTokenRepository.findByTokenAndExpiryDateAfter(request.refreshToken(), Instant.now())
             .orElseThrow(() -> new RuntimeException("Refresh token is expired or not found"));
 
-        Account account = refreshToken.getAccount();
+        AccountEntity account = refreshToken.getAccount();
 
         refreshTokenRepository.delete(refreshToken);
 
         String accessToken = JwtTools.generateToken(account.getUsername(), account.getAuthorities());
 
-        refreshToken = new RefreshToken();
-
+        refreshToken = new RefreshTokenEntity();
         refreshToken.setAccount(account);
         refreshToken.setToken(UUID.randomUUID().toString());
         refreshToken.setExpiryDate(Instant.now().plus(30, ChronoUnit.DAYS));
@@ -93,14 +90,14 @@ public class AccountService<T extends Account> {
         refreshTokenRepository.deleteByToken(request.refreshToken());
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public AccountResponse getProfile(Authentication authentication) {
         return accountRepository.findByUsername(authentication.getName(), projectionClass)
             .orElseThrow(() -> new EntityNotFoundException(authentication.getName()));
     }
 
     @Transactional
-    public void changeUsername(ChangeUsernameRequest request, Authentication authentication) {
+    public void changeUsername(Authentication authentication, ChangeUsernameRequest request) {
         T account = accountRepository.findByUsername(authentication.getName())
             .orElseThrow(() -> new EntityNotFoundException(authentication.getName()));
 
@@ -108,7 +105,7 @@ public class AccountService<T extends Account> {
     }
 
     @Transactional
-    public void changePassword(ChangePasswordRequest request, Authentication authentication) {
+    public void changePassword(Authentication authentication, ChangePasswordRequest request) {
         T account = accountRepository.findByUsername(authentication.getName())
             .orElseThrow(() -> new EntityNotFoundException(authentication.getName()));
 

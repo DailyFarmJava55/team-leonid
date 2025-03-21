@@ -4,7 +4,7 @@ import jakarta.persistence.Embeddable;
 import lombok.Data;
 
 @Data @Embeddable
-public class Location {
+public class LocationValue {
 
     long latitude;
     long longitude;

@@ -11,16 +11,17 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @Data @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @EntityListeners(AuditingEntityListener.class)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public abstract class Account {
+public abstract class AccountEntity {
 
-    @Id @EqualsAndHashCode.Include
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @Id @GeneratedValue
+    @EqualsAndHashCode.Include
+    private UUID uuid;
 
     @Column(nullable = false, unique = true)
     private String username;
@@ -40,5 +41,5 @@ public abstract class Account {
     private final Set<String> authorities = new HashSet<>();
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RefreshToken> refreshTokens;
+    private List<RefreshTokenEntity> refreshTokens;
 }

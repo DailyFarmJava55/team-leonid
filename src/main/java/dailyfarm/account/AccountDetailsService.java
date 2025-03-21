@@ -1,6 +1,6 @@
 package dailyfarm.account;
 
-import dailyfarm.account.entity.Account;
+import dailyfarm.account.entity.AccountEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,7 +13,7 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public class AccountDetailsService<T extends Account> implements UserDetailsService {
+public class AccountDetailsService<T extends AccountEntity> implements UserDetailsService {
 
     private final AccountRepository<T> accountRepository;
 
@@ -24,7 +24,7 @@ public class AccountDetailsService<T extends Account> implements UserDetailsServ
             .orElseThrow(() -> new UsernameNotFoundException(username));
     }
 
-    private Collection<GrantedAuthority> getAuthorities(Account account) {
+    private Collection<GrantedAuthority> getAuthorities(AccountEntity account) {
         return account.getAuthorities().stream()
             .map(SimpleGrantedAuthority::new)
             .collect(Collectors.toList());

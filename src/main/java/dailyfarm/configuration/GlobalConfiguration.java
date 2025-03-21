@@ -2,9 +2,9 @@ package dailyfarm.configuration;
 
 import dailyfarm.account.*;
 import dailyfarm.business.dto.BusinessResponse;
-import dailyfarm.business.entity.Business;
+import dailyfarm.business.entity.BusinessEntity;
 import dailyfarm.customer.dto.CustomerResponse;
-import dailyfarm.customer.entity.Customer;
+import dailyfarm.customer.entity.CustomerEntity;
 import dailyfarm.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +18,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -29,6 +30,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Slf4j @Configuration
 @EnableJpaAuditing
+@EnableMethodSecurity
 @RequiredArgsConstructor
 @EnableWebSecurity(debug = true)
 public class GlobalConfiguration {
@@ -114,7 +116,7 @@ public class GlobalConfiguration {
 
     @Bean("BusinessAuthenticationProvider")
     public AuthenticationProvider businessAuthenticationProvider(
-        AccountDetailsService<Business> accountDetailsService,
+        AccountDetailsService<BusinessEntity> accountDetailsService,
         PasswordEncoder passwordEncoder
     ) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -125,7 +127,7 @@ public class GlobalConfiguration {
 
     @Bean("CustomerAuthenticationProvider")
     public AuthenticationProvider customerAuthenticationProvider(
-        AccountDetailsService<Customer> accountDetailsService,
+        AccountDetailsService<CustomerEntity> accountDetailsService,
         PasswordEncoder passwordEncoder
     ) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -135,35 +137,35 @@ public class GlobalConfiguration {
     }
 
     @Bean
-    public AccountDetailsService<Business> businessDetailsService(
-        AccountRepository<Business> accountRepository
+    public AccountDetailsService<BusinessEntity> businessDetailsService(
+        AccountRepository<BusinessEntity> accountRepository
     ) {
         return new AccountDetailsService<>(accountRepository);
     }
 
     @Bean
-    public AccountDetailsService<Customer> customerDetailsService(
-        AccountRepository<Customer> accountRepository
+    public AccountDetailsService<CustomerEntity> customerDetailsService(
+        AccountRepository<CustomerEntity> accountRepository
     ) {
         return new AccountDetailsService<>(accountRepository);
     }
 
     @Bean
-    public AccountFactory<Business> businessFactory() {
-        return Business::new;
+    public AccountFactory<BusinessEntity> businessFactory() {
+        return BusinessEntity::new;
     }
 
     @Bean
-    public AccountFactory<Customer> customerFactory() {
-        return Customer::new;
+    public AccountFactory<CustomerEntity> customerFactory() {
+        return CustomerEntity::new;
     }
 
     @Bean
-    public AccountService<Business> businessAccountService(
+    public AccountService<BusinessEntity> businessAccountService(
         @Qualifier("BusinessAuthenticationManager")
         AuthenticationManager authenticationManager,
-        AccountRepository<Business> accountRepository,
-        AccountFactory<Business> accountFactory,
+        AccountRepository<BusinessEntity> accountRepository,
+        AccountFactory<BusinessEntity> accountFactory,
         PasswordEncoder passwordEncoder,
         RefreshTokenRepository refreshTokenRepository
     ) {
@@ -178,11 +180,11 @@ public class GlobalConfiguration {
     }
 
     @Bean
-    public AccountService<Customer> customerAccountService(
+    public AccountService<CustomerEntity> customerAccountService(
         @Qualifier("CustomerAuthenticationManager")
         AuthenticationManager authenticationManager,
-        AccountRepository<Customer> accountRepository,
-        AccountFactory<Customer> accountFactory,
+        AccountRepository<CustomerEntity> accountRepository,
+        AccountFactory<CustomerEntity> accountFactory,
         PasswordEncoder passwordEncoder,
         RefreshTokenRepository refreshTokenRepository
     ) {

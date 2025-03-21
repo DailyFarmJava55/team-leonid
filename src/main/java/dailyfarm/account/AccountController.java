@@ -1,7 +1,7 @@
 package dailyfarm.account;
 
 import dailyfarm.account.dto.*;
-import dailyfarm.account.entity.Account;
+import dailyfarm.account.entity.AccountEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @RequiredArgsConstructor
-public class AccountController<T extends Account> {
+public class AccountController<T extends AccountEntity> {
 
     private final AccountService<T> accountService;
 
@@ -47,13 +47,13 @@ public class AccountController<T extends Account> {
 
     @PostMapping("change-username")
     @ResponseStatus(HttpStatus.OK)
-    public void changeUsername(@RequestBody ChangeUsernameRequest request, Authentication authentication) {
-        accountService.changeUsername(request, authentication);
+    public void changeUsername(Authentication authentication, @RequestBody ChangeUsernameRequest request) {
+        accountService.changeUsername(authentication, request);
     }
 
     @PostMapping("change-password")
     @ResponseStatus(HttpStatus.OK)
-    public void changePassword(@RequestBody ChangePasswordRequest request, Authentication authentication) {
-        accountService.changePassword(request, authentication);
+    public void changePassword(Authentication authentication, @RequestBody ChangePasswordRequest request) {
+        accountService.changePassword(authentication, request);
     }
 }

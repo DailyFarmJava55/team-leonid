@@ -7,18 +7,19 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Data @Entity
 @EntityListeners(AuditingEntityListener.class)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class RefreshToken {
+public class RefreshTokenEntity {
 
-    @Id @EqualsAndHashCode.Include
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Id @GeneratedValue
+    @EqualsAndHashCode.Include
+    private UUID uuid;
 
     @ManyToOne(optional = false)
-    private Account account;
+    private AccountEntity account;
 
     @Column(nullable = false, unique = true, updatable = false)
     private String token;

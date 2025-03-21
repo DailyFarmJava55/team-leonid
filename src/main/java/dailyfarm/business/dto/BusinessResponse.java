@@ -1,9 +1,9 @@
 package dailyfarm.business.dto;
 
 import dailyfarm.account.dto.AccountResponse;
-import dailyfarm.business.entity.Location;
+import dailyfarm.business.entity.LocationValue;
 
 public interface BusinessResponse extends AccountResponse {
 
-    Location getLocation();
+    LocationValue getLocation();
 }

@@ -1,13 +1,13 @@
 package dailyfarm.account;
 
-import dailyfarm.account.entity.Account;
+import dailyfarm.account.entity.AccountEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import java.util.Optional;
 
 @NoRepositoryBean
-public interface AccountRepository<T extends Account> extends JpaRepository<T, Long> {
+public interface AccountRepository<T extends AccountEntity> extends JpaRepository<T, Long> {
 
     boolean existsByUsername(String username);
 

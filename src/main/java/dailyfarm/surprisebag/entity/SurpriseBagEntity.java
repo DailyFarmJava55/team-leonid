@@ -1,22 +1,24 @@
 package dailyfarm.surprisebag.entity;
 
-import dailyfarm.business.entity.Business;
+import dailyfarm.business.entity.BusinessEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.util.UUID;
+
 @Data @Entity
 @EntityListeners(AuditingEntityListener.class)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class SurpriseBag {
+public class SurpriseBagEntity {
 
     @Id @GeneratedValue
     @EqualsAndHashCode.Include
-    private Long id;
+    private UUID uuid;
 
     @ManyToOne(optional = false)
-    private Business business;
+    private BusinessEntity business;
 
     // TODO: TAGS Or/And TYPE(S)?
     // TODO: Price?
