@@ -25,26 +25,26 @@ public class AccountService<T extends Account> {
     private final AccountRepository<T> accountRepository;
     private final AccountFactory<T> accountFactory;
     private final PasswordEncoder passwordEncoder;
-    private final Class<? extends AccountResponse> projectionClass;
+    private final Class<? extends ProfileResponse> projectionClass;
     private final RefreshTokenRepository refreshTokenRepository;
 
     @Transactional
-    public void register(RegisterRequest request) {
-        if (accountRepository.existsByUsername(request.username())) {
-            throw new EntityExistsException(request.username());
+    public void register(RegisterRequest registerRequest) {
+        if (accountRepository.existsByUsername(registerRequest.username())) {
+            throw new EntityExistsException(registerRequest.username());
         }
 
         T account = accountFactory.create();
-        account.setUsername(request.username());
-        account.setPassword(passwordEncoder.encode(request.password()));
+        account.setUsername(registerRequest.username());
+        account.setPassword(passwordEncoder.encode(registerRequest.password()));
 
         accountRepository.save(account);
     }
 
     @Transactional
-    public TokenResponse login(LoginRequest request) {
+    public TokenResponse login(LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(request.username(), request.password())
+            new UsernamePasswordAuthenticationToken(loginRequest.username(), loginRequest.password())
         );
 
         System.out.println(authentication.getPrincipal().getClass());
@@ -65,8 +65,8 @@ public class AccountService<T extends Account> {
     }
 
     @Transactional
-    public TokenResponse refreshToken(RefreshTokenRequest request) {
-        RefreshToken refreshToken = refreshTokenRepository.findByTokenAndExpiryDateAfter(request.refreshToken(), Instant.now())
+    public TokenResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
+        RefreshToken refreshToken = refreshTokenRepository.findByTokenAndExpiryDateAfter(refreshTokenRequest.refreshToken(), Instant.now())
             .orElseThrow(() -> new RuntimeException("Refresh token is expired or not found"));
 
         Account account = refreshToken.getAccount();
@@ -86,30 +86,30 @@ public class AccountService<T extends Account> {
     }
 
     @Transactional
-    public void logout(RefreshTokenRequest request) {
-        refreshTokenRepository.deleteByToken(request.refreshToken());
+    public void logout(RefreshTokenRequest refreshTokenRequest) {
+        refreshTokenRepository.deleteByToken(refreshTokenRequest.refreshToken());
     }
 
     @Transactional(readOnly = true)
-    public AccountResponse getProfile(Authentication authentication) {
+    public ProfileResponse me(Authentication authentication) {
         return accountRepository.findByUsername(authentication.getName(), projectionClass)
             .orElseThrow(() -> new EntityNotFoundException(authentication.getName()));
     }
 
     @Transactional
-    public void changeUsername(Authentication authentication, ChangeUsernameRequest request) {
+    public void changeUsername(ChangeUsernameRequest changeUsernameRequest, Authentication authentication) {
         T account = accountRepository.findByUsername(authentication.getName())
             .orElseThrow(() -> new EntityNotFoundException(authentication.getName()));
 
-        account.setUsername(request.username());
+        account.setUsername(changeUsernameRequest.username());
     }
 
     @Transactional
-    public void changePassword(Authentication authentication, ChangePasswordRequest request) {
+    public void changePassword(ChangePasswordRequest changePasswordRequest, Authentication authentication) {
         T account = accountRepository.findByUsername(authentication.getName())
             .orElseThrow(() -> new EntityNotFoundException(authentication.getName()));
 
-        account.setPassword(request.password());
+        account.setPassword(changePasswordRequest.password());
     }
 
     // TODO: Surprise-Bag
@@ -125,6 +125,8 @@ public class AccountService<T extends Account> {
     // TODO: Change Email
 
     // TODO: Reset Password
+
+    // TODO: Access Token HttpOnly?
 
     // TODO: Refresh Token HttpOnly
 

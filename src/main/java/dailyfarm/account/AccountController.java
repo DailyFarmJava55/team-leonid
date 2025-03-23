@@ -17,43 +17,43 @@ public class AccountController<T extends Account> {
 
     @PostMapping("register")
     @ResponseStatus(HttpStatus.CREATED)
-    public void register(@RequestBody RegisterRequest request) {
-        accountService.register(request);
+    public void register(@RequestBody RegisterRequest registerRequest) {
+        accountService.register(registerRequest);
     }
 
     @PostMapping("login")
     @ResponseStatus(HttpStatus.OK)
-    public TokenResponse login(@RequestBody LoginRequest request) {
-        return accountService.login(request);
+    public TokenResponse login(@RequestBody LoginRequest loginRequest) {
+        return accountService.login(loginRequest);
     }
 
     @PostMapping("refresh-token")
     @ResponseStatus(HttpStatus.OK)
-    public TokenResponse refreshToken(@RequestBody RefreshTokenRequest request) {
-        return accountService.refreshToken(request);
+    public TokenResponse refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+        return accountService.refreshToken(refreshTokenRequest);
     }
 
     @PostMapping("logout")
     @ResponseStatus(HttpStatus.OK)
-    public void logout(@RequestBody RefreshTokenRequest request) {
-        accountService.logout(request);
+    public void logout(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+        accountService.logout(refreshTokenRequest);
     }
 
-    @GetMapping("profile")
+    @GetMapping("me")
     @ResponseStatus(HttpStatus.OK)
-    public AccountResponse getProfile(Authentication authentication) {
-        return accountService.getProfile(authentication);
+    public ProfileResponse me(Authentication authentication) {
+        return accountService.me(authentication);
     }
 
     @PostMapping("change-username")
     @ResponseStatus(HttpStatus.OK)
-    public void changeUsername(Authentication authentication, @RequestBody ChangeUsernameRequest request) {
-        accountService.changeUsername(authentication, request);
+    public void changeUsername(@RequestBody ChangeUsernameRequest changeUsernameRequest, Authentication authentication) {
+        accountService.changeUsername(changeUsernameRequest, authentication);
     }
 
     @PostMapping("change-password")
     @ResponseStatus(HttpStatus.OK)
-    public void changePassword(Authentication authentication, @RequestBody ChangePasswordRequest request) {
-        accountService.changePassword(authentication, request);
+    public void changePassword(@RequestBody ChangePasswordRequest changePasswordRequest, Authentication authentication) {
+        accountService.changePassword(changePasswordRequest, authentication);
     }
 }

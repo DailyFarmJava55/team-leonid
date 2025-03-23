@@ -1,6 +1,6 @@
 package dailyfarm.account.dto;
 
-public interface AccountResponse {
+public interface ProfileResponse {
 
     String getUsername();
 }

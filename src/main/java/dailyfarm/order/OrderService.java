@@ -2,8 +2,8 @@ package dailyfarm.order;
 
 import dailyfarm.customer.CustomerRepository;
 import dailyfarm.customer.entity.Customer;
-import dailyfarm.order.dto.CreateOrderRequest;
-import dailyfarm.order.dto.OrderResponse;
+import dailyfarm.order.dto.OrderReadDto;
+import dailyfarm.order.dto.OrderWriteDto;
 import dailyfarm.order.entity.Order;
 import dailyfarm.surprisebag.SurpriseBagRepository;
 import dailyfarm.surprisebag.entity.SurpriseBag;
@@ -12,6 +12,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.UUID;
 
 @Slf4j @Service
 @RequiredArgsConstructor
@@ -21,12 +25,13 @@ public class OrderService {
     private final CustomerRepository customerRepository;
     private final SurpriseBagRepository surpriseBagRepository;
 
-    public OrderResponse create(Authentication authentication, CreateOrderRequest request) {
+    @Transactional
+    public OrderReadDto create(OrderWriteDto orderWriteDto, Authentication authentication) {
         Customer customer = customerRepository.findByUsername(authentication.getName())
             .orElseThrow(() -> new EntityNotFoundException(authentication.getName()));
 
-        SurpriseBag surpriseBag = surpriseBagRepository.findById(request.surpriseBagId())
-            .orElseThrow(() -> new EntityNotFoundException(request.surpriseBagId().toString()));
+        SurpriseBag surpriseBag = surpriseBagRepository.findById(orderWriteDto.surpriseBagUuid())
+            .orElseThrow(() -> new EntityNotFoundException(orderWriteDto.surpriseBagUuid().toString()));
 
         Order order = new Order();
         order.setCustomer(customer);
@@ -34,10 +39,26 @@ public class OrderService {
 
         orderRepository.save(order);
 
-        return new OrderResponse(
-            order.getUuid(),
-            customer.getUuid(),
-            surpriseBag.getUuid()
-        );
+        return new OrderReadDto(order.getUuid(), customer.getUuid(), surpriseBag.getUuid());
+    }
+
+    @Transactional(readOnly = true)
+    public List<OrderReadDto> read(Authentication authentication) {
+        return null;
+    }
+
+    @Transactional(readOnly = true)
+    public OrderReadDto read(UUID orderUuid, Authentication authentication) {
+        return null;
+    }
+
+    @Transactional
+    public OrderReadDto update(UUID orderUuid, OrderWriteDto orderWriteDto, Authentication authentication) {
+        return null;
+    }
+
+    @Transactional
+    public void delete(UUID orderUuid, Authentication authentication) {
+
     }
 }

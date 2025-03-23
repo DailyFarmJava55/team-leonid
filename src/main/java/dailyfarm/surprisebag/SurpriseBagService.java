@@ -2,8 +2,8 @@ package dailyfarm.surprisebag;
 
 import dailyfarm.business.BusinessRepository;
 import dailyfarm.business.entity.Business;
-import dailyfarm.surprisebag.dto.CreateSurpriseBagRequest;
-import dailyfarm.surprisebag.dto.SurpriseBagResponse;
+import dailyfarm.surprisebag.dto.SurpriseBagReadDto;
+import dailyfarm.surprisebag.dto.SurpriseBagWriteDto;
 import dailyfarm.surprisebag.entity.SurpriseBag;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.UUID;
 
 @Slf4j @Service
 @RequiredArgsConstructor
@@ -20,7 +23,7 @@ public class SurpriseBagService {
     private final BusinessRepository businessRepository;
 
     @Transactional
-    public SurpriseBagResponse create(Authentication authentication, CreateSurpriseBagRequest request) {
+    public SurpriseBagReadDto create(SurpriseBagWriteDto surpriseBagWriteDto, Authentication authentication) {
         Business business = businessRepository.findByUsername(authentication.getName())
             .orElseThrow(() -> new EntityNotFoundException(authentication.getName()));
 
@@ -29,9 +32,26 @@ public class SurpriseBagService {
 
         surpriseBagRepository.save(surpriseBag);
 
-        return new SurpriseBagResponse(
-            surpriseBag.getUuid(),
-            business.getUuid()
-        );
+        return new SurpriseBagReadDto(surpriseBag.getUuid(), business.getUuid());
+    }
+
+    @Transactional(readOnly = true)
+    public List<SurpriseBagReadDto> read() {
+        return null;
+    }
+
+    @Transactional(readOnly = true)
+    public SurpriseBagReadDto read(UUID surpriseBagUuid) {
+        return null;
+    }
+
+    @Transactional
+    public SurpriseBagReadDto update(UUID surpriseBagUuid, SurpriseBagWriteDto surpriseBagWriteDto, Authentication authentication) {
+        return null;
+    }
+
+    @Transactional
+    public void delete(UUID surpriseBagUuid, Authentication authentication) {
+
     }
 }

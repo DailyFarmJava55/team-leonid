@@ -1,7 +1,7 @@
 package dailyfarm.customer.dto;
 
-import dailyfarm.account.dto.AccountResponse;
+import dailyfarm.account.dto.ProfileResponse;
 
-public interface CustomerResponse extends AccountResponse {
+public interface CustomerResponse extends ProfileResponse {
 
 }

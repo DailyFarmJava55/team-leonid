@@ -1,14 +1,14 @@
 package dailyfarm.surprisebag;
 
-import dailyfarm.surprisebag.dto.CreateSurpriseBagRequest;
-import dailyfarm.surprisebag.dto.SurpriseBagResponse;
+import dailyfarm.surprisebag.dto.SurpriseBagWriteDto;
+import dailyfarm.surprisebag.dto.SurpriseBagReadDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("surprise-bag")
@@ -17,9 +17,31 @@ public class SurpriseBagController {
 
     private final SurpriseBagService surpriseBagService;
 
-    @PostMapping("create")
+    @PostMapping
     @PreAuthorize("hasRole('BUSINESS')")
-    public SurpriseBagResponse create(Authentication authentication, @RequestBody CreateSurpriseBagRequest request) {
-        return surpriseBagService.create(authentication, request);
+    public SurpriseBagReadDto create(@RequestBody SurpriseBagWriteDto surpriseBagWriteDto, Authentication authentication) {
+        return surpriseBagService.create(surpriseBagWriteDto, authentication);
+    }
+
+    @GetMapping
+    public List<SurpriseBagReadDto> read() {
+        return surpriseBagService.read();
+    }
+
+    @GetMapping("{surpriseBagUuid}")
+    public SurpriseBagReadDto read(@PathVariable UUID surpriseBagUuid) {
+        return surpriseBagService.read(surpriseBagUuid);
+    }
+
+    @PutMapping("{surpriseBagUuid}")
+    @PreAuthorize("hasRole('BUSINESS')")
+    public SurpriseBagReadDto update(@PathVariable UUID surpriseBagUuid, @RequestBody SurpriseBagWriteDto surpriseBagWriteDto, Authentication authentication) {
+        return surpriseBagService.update(surpriseBagUuid, surpriseBagWriteDto, authentication);
+    }
+
+    @DeleteMapping("{surpriseBagUuid}")
+    @PreAuthorize("hasRole('BUSINESS')")
+    public void delete(@PathVariable UUID surpriseBagUuid, Authentication authentication) {
+        surpriseBagService.delete(surpriseBagUuid, authentication);
     }
 }
