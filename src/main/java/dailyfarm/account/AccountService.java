@@ -98,7 +98,7 @@ public class AccountService<T extends Account> {
 
     @Transactional
     public void changeUsername(ChangeUsernameRequest changeUsernameRequest, Authentication authentication) {
-        T account = accountRepository.findByUsername(authentication.getName())
+        Account account = accountRepository.findByUsername(authentication.getName())
             .orElseThrow(() -> new EntityNotFoundException(authentication.getName()));
 
         account.setUsername(changeUsernameRequest.username());
@@ -106,7 +106,7 @@ public class AccountService<T extends Account> {
 
     @Transactional
     public void changePassword(ChangePasswordRequest changePasswordRequest, Authentication authentication) {
-        T account = accountRepository.findByUsername(authentication.getName())
+        Account account = accountRepository.findByUsername(authentication.getName())
             .orElseThrow(() -> new EntityNotFoundException(authentication.getName()));
 
         account.setPassword(changePasswordRequest.password());

@@ -32,7 +32,7 @@ public class JwtTools {
         return Jwts.builder()
             .subject(username)
             .issuedAt(new Date(currentTimeMillis))
-            .expiration(new Date(currentTimeMillis + 1000 * 60 * 15)) // 15 minutes
+            .expiration(new Date(currentTimeMillis + 1000 * 60 * 15))
             .claim("authorities", authorities)
             .signWith(secretKey)
             .compact();

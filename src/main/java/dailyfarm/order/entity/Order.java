@@ -23,9 +23,4 @@ public class Order {
 
     @ManyToOne(optional = false)
     private SurpriseBag surpriseBag;
-
-    // TODO: Order Status?
-    // TODO: Order Item?
-    // TODO: Quantity?
-    // TODO: Price At Order Time?
 }
